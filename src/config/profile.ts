@@ -16,7 +16,7 @@ export const PROFILE = {
   ],
   skills: ["Next.js", "React", "TypeScript", "JavaScript", "HTML", "CSS", "生成AI API"],
   /** 公開デモのURL（Vercelにデプロイ後に設定） */
-  demoUrl: process.env.NEXT_PUBLIC_DEMO_URL || "",
+  demoUrl: process.env.NEXT_PUBLIC_DEMO_URL || "https://ai-inquiry-assistant-xi.vercel.app",
   /** ソースコードのURL（GitHub公開後に設定） */
   sourceUrl: process.env.NEXT_PUBLIC_SOURCE_URL || "https://github.com/ryo-ai-web/ai-inquiry-assistant",
   /** 相談窓口のURL（クラウドワークス／ランサーズのプロフィール、問い合わせフォームなど） */

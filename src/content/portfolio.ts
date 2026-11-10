@@ -57,7 +57,7 @@ export const TECH = [
   { name: "Anthropic Claude API", role: "生成AI。Structured Outputs で出力の形式を固定" },
   { name: "Zod", role: "AIの出力と入力値の検証" },
   { name: "Vitest", role: "入力チェック・エラー処理・デモ判定の自動テスト" },
-  { name: "Vercel（想定）", role: "公開先。APIキーは環境変数で管理" },
+  { name: "Vercel", role: "公開先。APIキーは環境変数で管理" },
 ];
 
 export const IDEAS = [

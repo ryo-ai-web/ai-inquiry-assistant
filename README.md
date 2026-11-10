@@ -3,6 +3,10 @@
 問い合わせ文を入力すると、生成AIが **分類・要約・重要度の判定・対応事項の抽出・トーン別の返信案の作成** を行うWebアプリです。
 ポートフォリオとして個人で企画・制作した自主制作デモであり、実在の企業への導入実績はありません。
 
+- デモ：https://ai-inquiry-assistant-xi.vercel.app （公開版はデモモードで動作）
+- 実績紹介：https://ai-inquiry-assistant-xi.vercel.app/works
+- 営業用資料：https://ai-inquiry-assistant-xi.vercel.app/sheet
+
 - 返信は **自動送信しません**。担当者が確認・修正してからコピーして使う設計です。
 - AI APIを設定しなくても **デモモード（AI未使用）** で動作を確認できます。
 

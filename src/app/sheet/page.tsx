@@ -226,7 +226,7 @@ function Page2() {
         </section>
 
         <section className="rounded-lg bg-ink px-6 py-4 text-white">
-          <div className="grid grid-cols-[1fr_250px] items-start gap-6">
+          <div className="grid grid-cols-[1fr_270px] items-start gap-6">
             <div>
               <p className="text-[15px] font-bold leading-snug">生成AIを使った業務効率化・小規模なWebアプリ開発のご相談を受け付けています</p>
               <p className="mt-2 text-[10.5px] leading-[1.7] text-white/75">
@@ -251,7 +251,15 @@ function SheetLink({ label, value, fallback = "公開準備中" }: { label: stri
   return (
     <div className="rounded bg-white/10 px-2.5 py-1">
       <dt className="text-[9px] font-bold tracking-wider text-white/60">{label}</dt>
-      <dd className="break-all font-semibold">{value || fallback}</dd>
+      <dd className="font-semibold">
+        {value ? (
+          <a href={value} className="break-all text-white">
+            {value.replace(/^https?:\/\//, "")}
+          </a>
+        ) : (
+          fallback
+        )}
+      </dd>
     </div>
   );
 }
