@@ -12,7 +12,7 @@ export function SiteHeader({ current }: { current: "/" | "/works" | "/sheet" }) 
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2.5" aria-label="問い合わせ対応アシスタント トップへ">
           <Logo />
-          <span className="text-[16px] font-black tracking-wide text-ink sm:text-[17px]">
+          <span className="hidden text-[17px] font-black tracking-wide text-ink sm:inline">
             問い合わせ<span className="text-brand">アシスタント</span>
           </span>
         </Link>
@@ -24,7 +24,7 @@ export function SiteHeader({ current }: { current: "/" | "/works" | "/sheet" }) 
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`rounded-full px-2.5 py-1.5 transition-colors sm:px-4 ${
+                className={`whitespace-nowrap rounded-full px-3 py-1.5 transition-colors sm:px-4 ${
                   active ? "bg-brand-soft text-brand-dark" : "text-ink-soft hover:text-brand"
                 }`}
               >

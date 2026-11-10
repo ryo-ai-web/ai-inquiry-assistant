@@ -11,7 +11,7 @@ export default function Home() {
         <section className="bg-hero">
           <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-14 pt-10 sm:px-6 sm:pt-14 lg:grid-cols-[minmax(0,11fr)_minmax(0,9fr)] lg:pb-20">
             <div>
-              <SelfMadeBadge>自主制作デモ｜APIキーがなくても動作を確認できます</SelfMadeBadge>
+              <SelfMadeBadge>自主制作デモ｜APIキーなしでも動きます</SelfMadeBadge>
               <h1 className="mt-6 text-[30px] font-black leading-[1.45] tracking-wide text-ink sm:text-[40px]">
                 問い合わせの仕分けと
                 <br />

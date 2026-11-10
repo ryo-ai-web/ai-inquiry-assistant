@@ -123,7 +123,7 @@ function Page1() {
               alt="PCでの結果画面"
               width={1440}
               height={1100}
-              className="block h-full w-full object-cover object-[50%_60%]"
+              className="block h-full w-full object-cover object-[50%_12%]"
               priority
             />
           </div>
