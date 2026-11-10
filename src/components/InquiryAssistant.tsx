@@ -142,7 +142,7 @@ export function InquiryAssistant() {
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start">
       {/* 入力 */}
-      <section aria-labelledby="input-heading" className="rounded-xl border border-line bg-surface p-5 shadow-[0_1px_2px_rgba(20,30,40,0.04)] sm:p-6 lg:sticky lg:top-6">
+      <section aria-labelledby="input-heading" className="rounded-2xl bg-surface p-5 shadow-[var(--shadow-card)] ring-1 ring-line/60 sm:p-8 lg:sticky lg:top-24">
         <StepTitle n={1} id="input-heading">問い合わせ文を入力</StepTitle>
 
         <ModeSwitch status={status} mode={mode} onChange={setMode} disabled={loading} />
@@ -195,7 +195,7 @@ export function InquiryAssistant() {
             placeholder={"例）お世話になっております。貴社サービスの導入を検討しており、料金について教えていただけますか。"}
             aria-invalid={Boolean(inputError) || over}
             aria-describedby="inquiry-help inquiry-error"
-            className={`mt-1.5 block w-full resize-y rounded-lg border bg-surface px-3.5 py-3 text-[15px] leading-relaxed text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-brand/30 ${
+            className={`mt-1.5 block w-full resize-y rounded-xl border bg-surface px-3.5 py-3 text-[15px] leading-relaxed text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-brand/30 ${
               inputError || over ? "border-high" : "border-line-strong focus:border-brand"
             }`}
           />
@@ -229,7 +229,7 @@ export function InquiryAssistant() {
             type="button"
             onClick={() => void run()}
             disabled={loading}
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-brand px-5 py-3 text-[15px] font-bold text-white transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-accent px-5 py-3.5 text-[15px] font-bold text-ink shadow-[var(--shadow-cta)] transition-colors hover:bg-accent-dark disabled:cursor-not-allowed disabled:shadow-none disabled:opacity-60"
           >
             {loading ? <Spinner /> : null}
             {loading ? "分析しています…" : mode === "ai" ? "AIで分析する" : "デモで結果を見る"}
@@ -238,7 +238,7 @@ export function InquiryAssistant() {
             type="button"
             onClick={clearAll}
             disabled={loading || (!text && phase.kind === "idle")}
-            className="rounded-lg border border-line-strong px-5 py-3 text-[15px] text-ink-soft transition-colors hover:bg-paper disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-xl border border-line-strong px-5 py-3.5 text-[15px] font-bold text-ink-soft transition-colors hover:bg-paper disabled:cursor-not-allowed disabled:opacity-50"
           >
             クリア
           </button>
@@ -248,7 +248,7 @@ export function InquiryAssistant() {
 
       {/* 結果 */}
       <section aria-labelledby="result-heading" ref={resultRef} className="scroll-mt-4">
-        <div className="rounded-xl border border-line bg-surface p-5 shadow-[0_1px_2px_rgba(20,30,40,0.04)] sm:p-6">
+        <div className="rounded-2xl bg-surface p-5 shadow-[var(--shadow-card)] ring-1 ring-line/60 sm:p-8">
           <StepTitle n={2} id="result-heading">結果を確認・修正して使う</StepTitle>
           <div aria-live="polite" aria-busy={loading}>
             {phase.kind === "idle" && <EmptyState />}
@@ -281,7 +281,7 @@ export function InquiryAssistant() {
 function StepTitle({ n, id, children }: { n: number; id: string; children: React.ReactNode }) {
   return (
     <h2 id={id} className="flex items-center gap-2.5 text-[17px] font-bold text-ink">
-      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink text-xs font-bold text-white">{n}</span>
+      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-sm font-black text-white">{n}</span>
       {children}
     </h2>
   );
@@ -301,7 +301,7 @@ function ModeSwitch({
   const aiAvailable = status?.aiAvailable ?? false;
   return (
     <div className="mt-4">
-      <div role="radiogroup" aria-label="動作モード" className="grid grid-cols-2 gap-1 rounded-lg bg-paper p-1">
+      <div role="radiogroup" aria-label="動作モード" className="grid grid-cols-2 gap-1 rounded-full bg-paper p-1 ring-1 ring-line">
         {(
           [
             { value: "ai", label: "AIモード", enabled: aiAvailable },
@@ -315,9 +315,9 @@ function ModeSwitch({
             aria-checked={mode === opt.value}
             disabled={!opt.enabled || disabled}
             onClick={() => onChange(opt.value)}
-            className={`rounded-md px-2 py-2 text-[13px] transition-colors disabled:cursor-not-allowed ${
+            className={`rounded-full px-2 py-2 text-[13px] font-bold transition-colors disabled:cursor-not-allowed ${
               mode === opt.value
-                ? "bg-surface font-bold text-ink shadow-[0_1px_2px_rgba(20,30,40,0.1)]"
+                ? "bg-brand text-white shadow-sm"
                 : "text-muted hover:text-ink disabled:hover:text-muted"
             } ${!opt.enabled ? "opacity-50" : ""}`}
           >
@@ -402,7 +402,7 @@ function ErrorState({
       <p className="mt-2 text-sm text-ink">{message}</p>
       {code && <p className="mt-1 text-xs text-muted">エラーコード：{code}</p>}
       <div className="mt-4 flex flex-wrap gap-2">
-        <button type="button" onClick={onRetry} className="rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white hover:bg-ink-soft">
+        <button type="button" onClick={onRetry} className="rounded-xl bg-brand px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-dark">
           もう一度試す
         </button>
         {onDemo && (
@@ -471,12 +471,12 @@ function ResultView({ data }: { data: AnalyzeSuccess }) {
 
       {/* 分類と重要度 */}
       <div className="grid gap-3 sm:grid-cols-2">
-        <div className="rounded-lg border border-line p-4">
+        <div className="rounded-xl bg-paper p-4 ring-1 ring-line">
           <p className="text-xs font-semibold text-muted">分類</p>
           <p className="mt-1 text-[17px] font-bold text-ink">{CATEGORY_LABELS[r.category]}</p>
           <p className="mt-1.5 text-[13px] leading-relaxed text-ink-soft">{r.categoryReason}</p>
         </div>
-        <div className="rounded-lg border border-line p-4">
+        <div className="rounded-xl bg-paper p-4 ring-1 ring-line">
           <p className="text-xs font-semibold text-muted">重要度</p>
           <p className="mt-1">
             <span className={`inline-flex items-center rounded-md border px-2.5 py-0.5 text-[15px] font-bold ${PRIORITY_STYLE[r.priority]}`}>
@@ -530,7 +530,7 @@ function ResultView({ data }: { data: AnalyzeSuccess }) {
       <div>
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h3 className="text-sm font-bold text-ink">返信案</h3>
-          <div role="tablist" aria-label="返信のトーン" className="flex rounded-lg bg-paper p-1">
+          <div role="tablist" aria-label="返信のトーン" className="flex rounded-full bg-paper p-1 ring-1 ring-line">
             {TONES.map((t) => (
               <button
                 key={t}
@@ -538,12 +538,12 @@ function ResultView({ data }: { data: AnalyzeSuccess }) {
                 role="tab"
                 aria-selected={tone === t}
                 onClick={() => setTone(t)}
-                className={`rounded-md px-3 py-1.5 text-[13px] transition-colors ${
-                  tone === t ? "bg-surface font-bold text-ink shadow-[0_1px_2px_rgba(20,30,40,0.1)]" : "text-muted hover:text-ink"
+                className={`rounded-full px-3.5 py-1.5 text-[13px] font-bold transition-colors ${
+                  tone === t ? "bg-brand text-white shadow-sm" : "text-muted hover:text-ink"
                 }`}
               >
                 {TONE_LABELS[t]}
-                {drafts[t] !== r.replies[t] && <span className="ml-1 text-brand">●</span>}
+                {drafts[t] !== r.replies[t] && <span className={`ml-1 ${tone === t ? "text-accent" : "text-brand"}`}>●</span>}
               </button>
             ))}
           </div>
@@ -557,7 +557,7 @@ function ResultView({ data }: { data: AnalyzeSuccess }) {
           value={draft}
           onChange={(e) => setDrafts((d) => ({ ...d, [tone]: e.target.value }))}
           rows={14}
-          className="mt-3 block w-full resize-y rounded-lg border border-line-strong bg-surface px-4 py-3 text-[15px] leading-relaxed text-ink focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/30"
+          className="mt-3 block w-full resize-y rounded-xl border border-line-strong bg-surface px-4 py-3 text-[15px] leading-relaxed text-ink focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/30"
         />
 
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs">
@@ -636,8 +636,8 @@ function CopyButton({ text, label, primary = false }: { text: string; label: str
     <button
       type="button"
       onClick={async () => setState((await writeClipboard(text)) ? "copied" : "failed")}
-      className={`inline-flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors ${
-        primary ? "bg-ink text-white hover:bg-ink-soft" : "border border-line-strong bg-surface text-ink-soft hover:bg-paper"
+      className={`inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-colors ${
+        primary ? "bg-brand text-white hover:bg-brand-dark" : "border-2 border-brand/40 bg-surface text-brand-dark hover:bg-brand-soft"
       }`}
     >
       <span aria-live="polite">

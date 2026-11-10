@@ -1,23 +1,22 @@
 import Link from "next/link";
 
 const NAV = [
-  { href: "/", label: "デモ" },
-  { href: "/works", label: "実績紹介" },
+  { href: "/", label: "デモを試す" },
+  { href: "/works", label: "制作実績" },
   { href: "/sheet", label: "営業資料" },
 ] as const;
 
 export function SiteHeader({ current }: { current: "/" | "/works" | "/sheet" }) {
   return (
-    <header className="no-print border-b border-line bg-surface/90">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-3">
+    <header className="no-print sticky top-0 z-30 border-b border-line/70 bg-white/95 backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+        <Link href="/" className="flex items-center gap-2.5" aria-label="問い合わせ対応アシスタント トップへ">
           <Logo />
-          <span className="leading-tight">
-            <span className="block text-[15px] font-bold tracking-wide text-ink">問い合わせ対応アシスタント</span>
-            <span className="block text-[11px] text-muted">生成AIによる一次対応の下書き支援</span>
+          <span className="text-[16px] font-black tracking-wide text-ink sm:text-[17px]">
+            問い合わせ<span className="text-brand">アシスタント</span>
           </span>
         </Link>
-        <nav aria-label="メインメニュー" className="flex items-center gap-1 text-sm">
+        <nav aria-label="メインメニュー" className="flex items-center gap-0.5 text-[13px] font-bold sm:gap-1 sm:text-sm">
           {NAV.map((item) => {
             const active = item.href === current;
             return (
@@ -25,8 +24,8 @@ export function SiteHeader({ current }: { current: "/" | "/works" | "/sheet" }) 
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`rounded-md px-3 py-1.5 transition-colors ${
-                  active ? "bg-brand-soft font-semibold text-brand-dark" : "text-ink-soft hover:bg-paper"
+                className={`rounded-full px-2.5 py-1.5 transition-colors sm:px-4 ${
+                  active ? "bg-brand-soft text-brand-dark" : "text-ink-soft hover:text-brand"
                 }`}
               >
                 {item.label}
@@ -39,35 +38,38 @@ export function SiteHeader({ current }: { current: "/" | "/works" | "/sheet" }) 
   );
 }
 
-export function Logo({ size = 34 }: { size?: number }) {
+export function Logo({ size = 32 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 34 34" aria-hidden="true">
-      <rect width="34" height="34" rx="8" fill="#1d4f7a" />
-      <path d="M9 11.5h16a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-9l-4.5 3.5v-3.5H9A1.5 1.5 0 0 1 7.5 21v-8A1.5 1.5 0 0 1 9 11.5Z" fill="#fff" />
-      <path d="M12 15.5h10M12 18.5h6" stroke="#1d4f7a" strokeWidth="1.6" strokeLinecap="round" />
+    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
+      <rect width="32" height="32" rx="9" fill="#17885a" />
+      <path d="M8.5 10.5h15a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5H15l-4.5 3.5V21H8.5A1.5 1.5 0 0 1 7 19.5V12a1.5 1.5 0 0 1 1.5-1.5Z" fill="#fff" />
+      <circle cx="12" cy="15.75" r="1.4" fill="#17885a" />
+      <circle cx="16" cy="15.75" r="1.4" fill="#17885a" />
+      <circle cx="20" cy="15.75" r="1.4" fill="#f6c344" />
     </svg>
   );
 }
 
-export function SelfMadeBadge({ className = "" }: { className?: string }) {
+export function SelfMadeBadge({ className = "", children = "自主制作デモ" }: { className?: string; children?: React.ReactNode }) {
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-surface px-2.5 py-0.5 text-xs font-semibold text-ink-soft ${className}`}
-    >
-      <span className="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true" />
-      自主制作デモ
+    <span className={`inline-flex items-center rounded-full bg-ink/80 px-4 py-1.5 text-[13px] font-bold leading-snug text-white ${className}`}>
+      {children}
     </span>
   );
 }
 
 export function SiteFooter() {
   return (
-    <footer className="no-print mt-auto border-t border-line bg-surface">
-      <div className="mx-auto max-w-6xl px-4 py-6 text-xs leading-relaxed text-muted sm:px-6">
-        <p>
-          本アプリはポートフォリオ用の自主制作デモです。実在の企業・サービスとは関係ありません。サンプル問い合わせはすべて架空の内容です。
-        </p>
-        <p className="mt-1">AIの出力は下書きです。送信前に必ず人が内容を確認・修正してください。</p>
+    <footer className="no-print mt-auto bg-ink text-white/80">
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <div className="flex items-center gap-2.5">
+          <Logo size={26} />
+          <span className="text-sm font-bold text-white">問い合わせアシスタント</span>
+        </div>
+        <div className="text-xs leading-relaxed text-white/60 sm:text-right">
+          <p>ポートフォリオ用の自主制作デモです。実在の企業・サービスとは関係ありません。</p>
+          <p>サンプル問い合わせはすべて架空の内容です。AIの出力は、送信前に必ず人が確認してください。</p>
+        </div>
       </div>
     </footer>
   );

@@ -59,9 +59,10 @@ function Paper({ children, n }: { children: React.ReactNode; n: number }) {
 
 function H({ n, children }: { n: string; children: React.ReactNode }) {
   return (
-    <h2 className="flex items-baseline gap-2 border-b-2 border-ink pb-1 text-[15px] font-bold leading-tight">
-      <span className="text-[11px] font-bold tracking-[0.15em] text-brand">{n}</span>
+    <h2 className="flex items-center gap-2 text-[15px] font-black leading-tight">
+      <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-brand px-1 text-[10px] font-black text-white">{Number(n)}</span>
       {children}
+      <span className="ml-1 h-px flex-1 bg-line-strong" aria-hidden="true" />
     </h2>
   );
 }
@@ -70,17 +71,21 @@ function Page1() {
   return (
     <Paper n={1}>
       {/* タイトル帯 */}
-      <header className="bg-ink px-12 pb-6 pt-9 text-white">
+      <header className="bg-hero px-12 pb-6 pt-9 text-ink">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <Logo size={26} />
-            <span className="text-[11px] font-semibold tracking-[0.12em] text-white/70">WORKS ｜ 生成AI × Webアプリ開発</span>
+            <span className="text-[11px] font-bold tracking-[0.12em] text-brand-dark">制作実績 ｜ 生成AI × Webアプリ開発</span>
           </div>
-          <span className="rounded-full border border-white/40 px-3 py-0.5 text-[11px] font-bold">自主制作デモ</span>
+          <span className="rounded-full bg-ink/80 px-3 py-0.5 text-[11px] font-bold text-white">自主制作デモ</span>
         </div>
-        <h1 className="mt-5 text-[30px] font-bold leading-tight tracking-wide">{PROJECT.name}</h1>
-        <p className="mt-2 text-[14px] leading-relaxed text-white/85">{PROJECT.tagline}</p>
-        <p className="mt-3 text-[10.5px] leading-relaxed text-white/60">{PROJECT.selfMadeNote}</p>
+        <h1 className="mt-4 text-[30px] font-black leading-tight tracking-wide">
+          問い合わせ対応を、<span className="text-brand">AIで仕分けて下書きまで。</span>
+        </h1>
+        <p className="mt-2 text-[14px] font-bold leading-relaxed text-ink-soft">
+          {PROJECT.name}｜{PROJECT.tagline}
+        </p>
+        <p className="mt-2 text-[10.5px] leading-relaxed text-muted">{PROJECT.selfMadeNote}</p>
       </header>
 
       <div className="flex flex-col gap-5 px-12 pt-6">
@@ -131,7 +136,7 @@ function Page1() {
           <H n="04">主要機能</H>
           <div className="mt-3 grid grid-cols-4 gap-2">
             {FEATURES.map((f) => (
-              <div key={f.title} className="rounded-md bg-paper px-2.5 py-2">
+              <div key={f.title} className="rounded-lg bg-paper px-2.5 py-2 ring-1 ring-line">
                 <p className="text-[11.5px] font-bold leading-snug">{f.title}</p>
                 <p className="mt-1 text-[9.5px] leading-[1.6] text-ink-soft">{f.body}</p>
               </div>
@@ -163,7 +168,7 @@ function Page2() {
             </ol>
           </section>
           <figure>
-            <div className="h-[300px] overflow-hidden rounded-[16px] border-[5px] border-ink">
+            <div className="h-[300px] overflow-hidden rounded-[18px] border-[5px] border-ink">
               <Image
                 src="/screenshots/mobile-result.png"
                 alt="スマートフォンでの結果画面"
@@ -225,7 +230,7 @@ function Page2() {
           </ul>
         </section>
 
-        <section className="rounded-lg bg-ink px-6 py-4 text-white">
+        <section className="rounded-xl bg-brand px-6 py-4 text-white">
           <div className="grid grid-cols-[1fr_270px] items-start gap-6">
             <div>
               <p className="text-[15px] font-bold leading-snug">生成AIを使った業務効率化・小規模なWebアプリ開発のご相談を受け付けています</p>
@@ -249,11 +254,11 @@ function Page2() {
 
 function SheetLink({ label, value, fallback = "公開準備中" }: { label: string; value: string; fallback?: string }) {
   return (
-    <div className="rounded bg-white/10 px-2.5 py-1">
-      <dt className="text-[9px] font-bold tracking-wider text-white/60">{label}</dt>
+    <div className="rounded-lg bg-white px-2.5 py-1 text-ink">
+      <dt className="text-[9px] font-bold tracking-wider text-muted">{label}</dt>
       <dd className="font-semibold">
         {value ? (
-          <a href={value} className="break-all text-white">
+          <a href={value} className="break-all text-brand-dark">
             {value.replace(/^https?:\/\//, "")}
           </a>
         ) : (

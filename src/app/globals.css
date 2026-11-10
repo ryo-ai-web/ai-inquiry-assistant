@@ -1,30 +1,41 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "BIZ UDPGothic", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+  --font-sans: var(--font-noto), "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  --color-paper: #f6f5f1;
+  /* 背景・文字 */
+  --color-paper: #f3f8f4;
   --color-surface: #ffffff;
-  --color-ink: #1b2330;
-  --color-ink-soft: #3d4756;
-  --color-muted: #5f6977;
-  --color-line: #e2e0d9;
-  --color-line-strong: #cfccc2;
+  --color-ink: #2b3631;
+  --color-ink-soft: #46524c;
+  --color-muted: #6a7570;
+  --color-line: #e0e8e2;
+  --color-line-strong: #c6d3ca;
 
-  --color-brand: #1d4f7a;
-  --color-brand-dark: #153b5c;
-  --color-brand-soft: #e8eff6;
+  /* メインカラー（グリーン） */
+  --color-brand: #17885a;
+  --color-brand-dark: #0f6a45;
+  --color-brand-soft: #e4f4ea;
+  --color-mint: #d9f0e1;
 
-  --color-high: #b42318;
+  /* アクセント（ボタン用イエロー） */
+  --color-accent: #f6c344;
+  --color-accent-dark: #ebb321;
+
+  /* 状態色 */
+  --color-high: #c8341f;
   --color-high-soft: #fdecea;
-  --color-mid: #93500a;
-  --color-mid-soft: #fdf2e2;
-  --color-low: #2f6b3f;
-  --color-low-soft: #e9f4ec;
+  --color-mid: #a35c00;
+  --color-mid-soft: #fff3dc;
+  --color-low: #17885a;
+  --color-low-soft: #e4f4ea;
 
-  --color-demo: #6b4e16;
-  --color-demo-soft: #fbf3df;
+  --color-demo: #7a5a00;
+  --color-demo-soft: #fff7df;
+
+  --shadow-card: 0 2px 4px rgba(32, 60, 45, 0.04), 0 8px 24px rgba(32, 60, 45, 0.07);
+  --shadow-cta: 0 4px 0 #d9a414;
 }
 
 :root {
@@ -40,12 +51,13 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-feature-settings: "palt" 0;
-  line-height: 1.75;
-  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
 }
 
 ::selection {
-  background: #cfe0ef;
+  background: #c8ead5;
 }
 
 :focus-visible {
@@ -89,4 +101,11 @@ body {
     margin: 0 !important;
     break-inside: avoid;
   }
+}
+
+/* ヒーローの背景（淡いグリーンのグラデーション） */
+.bg-hero {
+  background:
+    radial-gradient(1200px 500px at 85% 10%, rgba(255, 236, 170, 0.55), transparent 60%),
+    linear-gradient(160deg, #e3f5e8 0%, #eef8ef 45%, #f7fbf4 100%);
 }

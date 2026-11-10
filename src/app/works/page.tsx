@@ -1,6 +1,23 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  IconBadge,
+  IconCheck,
+  IconChecklist,
+  IconClock,
+  IconCode,
+  IconCopy,
+  IconFlag,
+  IconInbox,
+  IconPen,
+  IconPlay,
+  IconShield,
+  IconSummary,
+  IconTag,
+  IconTone,
+  IconUserCheck,
+} from "@/components/Icons";
 import { SelfMadeBadge, SiteFooter, SiteHeader } from "@/components/SiteHeader";
 import { PROFILE } from "@/config/profile";
 import {
@@ -16,26 +33,17 @@ import {
   SCOPE_NOTE,
   SECURITY,
   SIMILAR_WORKS,
-  SOLUTION,
   TECH,
   USERS,
 } from "@/content/portfolio";
 
 export const metadata: Metadata = {
-  title: "実績紹介",
+  title: "制作実績",
   description: "生成AIを活用した問い合わせ対応支援ツール（自主制作）の制作実績紹介です。",
 };
 
-const TOC = [
-  ["problem", "課題"],
-  ["solution", "解決方法"],
-  ["features", "機能"],
-  ["tech", "使用技術"],
-  ["ideas", "工夫した点"],
-  ["safety", "安全性への配慮"],
-  ["scope", "担当範囲"],
-  ["contact", "ご相談"],
-] as const;
+const FEATURE_ICONS = [IconTag, IconSummary, IconFlag, IconChecklist, IconPen, IconTone, IconCopy, IconPlay];
+const FLOW_ICONS = [IconInbox, IconClock, IconPen, IconCopy];
 
 export default function WorksPage() {
   return (
@@ -43,34 +51,41 @@ export default function WorksPage() {
       <SiteHeader current="/works" />
       <main className="flex-1">
         {/* ヒーロー */}
-        <section className="border-b border-line bg-surface">
-          <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:items-center">
+        <section className="bg-hero">
+          <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-16 pt-10 sm:px-6 sm:pt-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:pb-20">
             <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <SelfMadeBadge />
-                <span className="text-xs text-muted">制作実績｜生成AI × Webアプリ</span>
-              </div>
-              <h1 className="mt-4 text-[28px] font-bold leading-snug tracking-wide sm:text-[34px]">{PROJECT.name}</h1>
-              <p className="mt-2 text-[17px] font-semibold leading-relaxed text-ink-soft">{PROJECT.tagline}</p>
-              <p className="mt-4 rounded-lg border border-line bg-paper px-4 py-3 text-sm leading-relaxed text-ink-soft">
-                {PROJECT.selfMadeNote}
+              <SelfMadeBadge>制作実績｜個人で企画・開発した自主制作デモ</SelfMadeBadge>
+              <h1 className="mt-6 text-[28px] font-black leading-[1.45] tracking-wide sm:text-[38px]">
+                問い合わせ対応を、
+                <br />
+                <span className="text-brand">AIで仕分けて下書きまで。</span>
+              </h1>
+              <p className="mt-4 text-[17px] font-bold text-ink-soft">{PROJECT.name}</p>
+              <p className="mt-3 text-[15px] leading-[1.9] text-ink-soft">
+                届いた問い合わせの分類・要約・重要度・対応事項の整理と、返信文の下書きを生成AIで行うWebアプリです。返信は自動送信せず、人が確認してから使う設計にしています。
               </p>
-              <div className="mt-6 flex flex-col gap-2 sm:flex-row">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href="/?sample=question&run=1&mode=demo"
-                  className="inline-flex items-center justify-center rounded-lg bg-brand px-5 py-3 text-[15px] font-bold text-white hover:bg-brand-dark"
+                  href="/?sample=question&run=1&mode=demo#try"
+                  className="inline-flex items-center justify-center rounded-xl bg-accent px-8 py-4 text-[15px] font-bold text-ink shadow-[var(--shadow-cta)] hover:bg-accent-dark"
                 >
-                  デモを操作してみる
+                  デモを試してみる
                 </Link>
-                <a
-                  href="#contact"
-                  className="inline-flex items-center justify-center rounded-lg border border-line-strong bg-surface px-5 py-3 text-[15px] font-semibold text-ink-soft hover:bg-paper"
-                >
-                  開発のご相談について
-                </a>
+                {PROFILE.sourceUrl && (
+                  <a
+                    href={PROFILE.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-brand/40 bg-white px-6 py-3.5 text-[15px] font-bold text-brand-dark hover:bg-brand-soft"
+                  >
+                    <IconCode className="h-5 w-5" />
+                    ソースコードを見る
+                  </a>
+                )}
               </div>
+              <p className="mt-5 text-xs leading-relaxed text-muted">{PROJECT.selfMadeNote}</p>
             </div>
-            <figure className="overflow-hidden rounded-xl border border-line bg-paper shadow-[0_8px_30px_rgba(20,30,40,0.08)]">
+            <BrowserFrame>
               <Image
                 src="/screenshots/desktop-result.png"
                 alt="問い合わせ対応アシスタントの結果画面。分類・重要度・要約・対応事項が表示されている"
@@ -79,261 +94,324 @@ export default function WorksPage() {
                 className="h-auto w-full"
                 priority
               />
-            </figure>
+            </BrowserFrame>
           </div>
         </section>
 
-        <nav aria-label="ページ内リンク" className="no-print sticky top-0 z-10 border-b border-line bg-paper/95 backdrop-blur">
-          <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 py-2 text-[13px] sm:px-6">
-            {TOC.map(([id, label]) => (
-              <a key={id} href={`#${id}`} className="shrink-0 rounded-md px-3 py-1.5 text-ink-soft hover:bg-surface">
-                {label}
-              </a>
+        {/* 課題 */}
+        <Section id="problem" title="こんなお悩みはありませんか？" lead="問い合わせ対応を兼務している少人数のチームを想定しました。">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {PROBLEMS.map((p) => (
+              <div key={p} className="flex items-start gap-4 rounded-2xl bg-white p-5 shadow-[var(--shadow-card)] sm:p-6">
+                <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-high-soft text-lg font-black text-high">!</span>
+                <p className="text-[15px] font-medium leading-[1.8]">{p}</p>
+              </div>
             ))}
           </div>
-        </nav>
-
-        <div className="mx-auto max-w-6xl space-y-16 px-4 py-12 sm:px-6 sm:py-16">
-          {/* 課題・利用者 */}
-          <Section id="problem" eyebrow="01" title="解決したい業務課題">
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-              <ul className="space-y-3">
-                {PROBLEMS.map((p) => (
-                  <li key={p} className="flex gap-3 rounded-lg border border-line bg-surface p-4 text-[15px] leading-relaxed">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-high" aria-hidden="true" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
-              <div className="rounded-lg border border-line bg-surface p-5">
-                <h3 className="text-sm font-bold text-ink">想定利用者</h3>
-                <ul className="mt-3 space-y-2.5 text-[15px] leading-relaxed text-ink-soft">
-                  {USERS.map((u) => (
-                    <li key={u} className="flex gap-2.5">
-                      <span className="text-brand" aria-hidden="true">
-                        ―
-                      </span>
-                      {u}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </Section>
-
-          {/* 解決方法・流れ */}
-          <Section id="solution" eyebrow="02" title="提案した解決方法">
-            <p className="max-w-3xl text-[17px] font-semibold leading-relaxed text-ink">{SOLUTION.lead}</p>
-            <ul className="mt-4 max-w-3xl list-disc space-y-1.5 pl-5 text-[15px] leading-relaxed text-ink-soft marker:text-muted">
-              {SOLUTION.points.map((p) => (
-                <li key={p}>{p}</li>
-              ))}
-            </ul>
-            <h3 className="mt-10 text-sm font-bold text-ink">利用の流れ</h3>
-            <ol className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {FLOW.map((f, i) => (
-                <li key={f.title} className="rounded-lg border border-line bg-surface p-4">
-                  <p className="text-xs font-bold text-brand">STEP {i + 1}</p>
-                  <p className="mt-1 font-bold text-ink">{f.title}</p>
-                  <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{f.body}</p>
+          <div className="mt-8 rounded-2xl bg-white p-6 shadow-[var(--shadow-card)]">
+            <p className="text-center text-sm font-bold text-brand">想定している利用者</p>
+            <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+              {USERS.map((u) => (
+                <li key={u} className="flex items-start gap-3 rounded-xl bg-paper p-4 text-sm leading-relaxed">
+                  <IconBadge size="sm">
+                    <IconUserCheck />
+                  </IconBadge>
+                  <span className="pt-1.5">{u}</span>
                 </li>
               ))}
-            </ol>
-          </Section>
+            </ul>
+          </div>
+        </Section>
 
-          {/* 機能 */}
-          <Section id="features" eyebrow="03" title="主な機能">
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {FEATURES.map((f) => (
-                <div key={f.title} className="rounded-lg border border-line bg-surface p-4">
-                  <p className="font-bold text-ink">{f.title}</p>
-                  <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{f.body}</p>
+        {/* 解決方法 */}
+        <Section id="solution" title="AIと人で、役割を分けました" lead="AIは「読む・整理する・下書きする」まで。「判断する・送信する」は人が行います。" tone="white">
+          <div className="grid gap-5 md:grid-cols-2">
+            <RoleCard
+              label="AIが担当"
+              color="brand"
+              items={["問い合わせの分類（5種類）", "内容の要約", "重要度の判定と理由", "対応事項・確認事項の抽出", "3つのトーンで返信案を作成"]}
+            />
+            <RoleCard label="人が担当" color="accent" items={["分類・重要度が妥当か確認", "【要確認】の箇所を埋める", "返信案を修正する", "コピーして送信する（自動送信はしません）"]} />
+          </div>
+
+          <h3 className="mt-14 text-center text-[20px] font-black">ご利用の流れ</h3>
+          <ol className="mt-6 grid gap-4 md:grid-cols-4">
+            {FLOW.map((f, i) => {
+              const Icon = FLOW_ICONS[i];
+              return (
+                <li key={f.title} className="relative rounded-2xl bg-paper p-5 text-center">
+                  <span className="text-xs font-black tracking-widest text-brand">STEP {i + 1}</span>
+                  <div className="mt-3 flex justify-center">
+                    <IconBadge size="lg">
+                      <Icon />
+                    </IconBadge>
+                  </div>
+                  <p className="mt-3 text-[17px] font-black">{f.title}</p>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-ink-soft">{f.body}</p>
+                  {i < FLOW.length - 1 && (
+                    <span aria-hidden="true" className="absolute -right-3 top-1/2 z-10 hidden h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-brand text-xs text-white md:flex">
+                      ▶
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        </Section>
+
+        {/* 機能 */}
+        <Section id="features" title="主な機能" lead="問い合わせ1件につき、必要な情報をひとつの画面にまとめます。">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {FEATURES.map((f, i) => {
+              const Icon = FEATURE_ICONS[i];
+              return (
+                <div key={f.title} className="rounded-2xl bg-white p-6 text-center shadow-[var(--shadow-card)]">
+                  <div className="flex justify-center">
+                    <IconBadge size="lg">
+                      <Icon />
+                    </IconBadge>
+                  </div>
+                  <p className="mt-4 text-[16px] font-black">{f.title}</p>
+                  <p className="mt-2 text-left text-[13px] leading-[1.8] text-ink-soft">{f.body}</p>
                 </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-12 grid items-start gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+            <figure>
+              <BrowserFrame>
+                <Image src="/screenshots/desktop-reply.png" alt="返信案の画面。トーンの切り替えと要確認箇所の表示" width={1440} height={1100} className="h-auto w-full" />
+              </BrowserFrame>
+              <figcaption className="mt-3 text-center text-sm text-muted">PC：返信案のトーン切り替えと【要確認】の表示</figcaption>
+            </figure>
+            <figure className="mx-auto w-full max-w-[280px]">
+              <div className="overflow-hidden rounded-[28px] border-[7px] border-ink bg-white shadow-[var(--shadow-card)]">
+                <Image src="/screenshots/mobile-result.png" alt="スマートフォンでの結果表示" width={390} height={844} className="h-auto w-full" />
+              </div>
+              <figcaption className="mt-3 text-center text-sm text-muted">スマートフォンにも対応</figcaption>
+            </figure>
+          </div>
+        </Section>
+
+        {/* 工夫 */}
+        <Section id="ideas" title="開発で工夫した点" tone="white">
+          <div className="grid gap-4 md:grid-cols-2">
+            {IDEAS.map((idea, i) => (
+              <div key={idea.title} className={`rounded-2xl bg-paper p-6 ${i === IDEAS.length - 1 ? "md:col-span-2" : ""}`}>
+                <p className="flex items-start gap-3 text-[16px] font-black leading-snug">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-sm text-ink">{i + 1}</span>
+                  <span className="pt-0.5">{idea.title}</span>
+                </p>
+                <p className="mt-3 text-[14px] leading-[1.9] text-ink-soft">{idea.body}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* 安全性 */}
+        <Section id="safety" title="安心して使っていただくための配慮">
+          <div className="grid gap-5 lg:grid-cols-2">
+            <CheckCard icon={<IconShield />} title="セキュリティ・個人情報" items={SECURITY} />
+            <CheckCard icon={<IconUserCheck />} title="AIの誤回答への対策" items={ACCURACY} />
+          </div>
+          <div className="mt-6 rounded-2xl border-2 border-dashed border-accent bg-[#fffbea] p-6">
+            <p className="text-[15px] font-black">想定される効果（検証前の仮説です）</p>
+            <ul className="mt-3 space-y-1.5 text-sm leading-relaxed">
+              {HYPOTHESES.map((h) => (
+                <li key={h} className="flex gap-2">
+                  <span className="text-accent-dark">●</span>
+                  {h}
+                </li>
               ))}
-            </div>
-            <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
-              <figure>
-                <div className="overflow-hidden rounded-xl border border-line bg-surface">
-                  <Image
-                    src="/screenshots/desktop-reply.png"
-                    alt="返信案の画面。丁寧・簡潔・親しみやすいのトーン切り替えと、要確認箇所の表示"
-                    width={1440}
-                    height={1100}
-                    className="h-auto w-full"
-                  />
-                </div>
-                <figcaption className="mt-2 text-xs text-muted">PC表示：返信案のトーン切り替えと【要確認】箇所の表示</figcaption>
-              </figure>
-              <figure className="mx-auto w-full max-w-[300px]">
-                <div className="overflow-hidden rounded-[22px] border-[6px] border-ink bg-surface">
-                  <Image
-                    src="/screenshots/mobile-result.png"
-                    alt="スマートフォンでの結果表示"
-                    width={390}
-                    height={844}
-                    className="h-auto w-full"
-                  />
-                </div>
-                <figcaption className="mt-2 text-center text-xs text-muted">スマートフォン表示</figcaption>
-              </figure>
-            </div>
-          </Section>
+            </ul>
+            <p className="mt-3 text-xs leading-relaxed text-ink-soft">
+              自主制作のため、実際の業務での削減時間や精度は測定していません。導入する場合は、過去の問い合わせで分類の正確さや修正の手間を確かめる検証期間を設けることをおすすめします。
+            </p>
+          </div>
+        </Section>
 
-          {/* 技術 */}
-          <Section id="tech" eyebrow="04" title="使用技術">
-            <dl className="grid gap-x-8 sm:grid-cols-2">
-              {TECH.map((t) => (
-                <div key={t.name} className="flex flex-col gap-0.5 border-b border-line py-3">
-                  <dt className="font-bold text-ink">{t.name}</dt>
-                  <dd className="text-sm text-ink-soft">{t.role}</dd>
-                </div>
-              ))}
-            </dl>
-          </Section>
-
-          {/* 工夫 */}
-          <Section id="ideas" eyebrow="05" title="開発で工夫した点">
-            <div className="grid gap-4 lg:grid-cols-2">
-              {IDEAS.map((idea, i) => (
-                <div key={idea.title} className="rounded-lg border border-line bg-surface p-5">
-                  <p className="flex items-baseline gap-2 font-bold text-ink">
-                    <span className="text-sm text-brand tabular-nums">{String(i + 1).padStart(2, "0")}</span>
-                    {idea.title}
-                  </p>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">{idea.body}</p>
-                </div>
-              ))}
-            </div>
-          </Section>
-
-          {/* 安全性 */}
-          <Section id="safety" eyebrow="06" title="セキュリティ・個人情報と、AIの誤回答への配慮">
-            <div className="grid gap-6 lg:grid-cols-2">
-              <CheckList title="セキュリティ・個人情報への配慮" items={SECURITY} />
-              <CheckList title="AIの誤回答への対策" items={ACCURACY} />
-            </div>
-            <div className="mt-6 rounded-lg border border-demo/20 bg-demo-soft p-5">
-              <h3 className="text-sm font-bold text-demo">想定される効果（未検証の仮説）</h3>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-ink-soft marker:text-demo/60">
-                {HYPOTHESES.map((h) => (
-                  <li key={h}>{h}</li>
+        {/* 技術・担当 */}
+        <Section id="scope" title="使用技術と担当範囲" tone="white">
+          <div className="grid gap-5 lg:grid-cols-2">
+            <div className="rounded-2xl bg-paper p-6">
+              <p className="text-[16px] font-black">使用技術</p>
+              <dl className="mt-4 divide-y divide-line">
+                {TECH.map((t) => (
+                  <div key={t.name} className="grid gap-0.5 py-2.5 sm:grid-cols-[170px_1fr] sm:gap-4">
+                    <dt className="text-sm font-bold">{t.name}</dt>
+                    <dd className="text-sm text-ink-soft">{t.role}</dd>
+                  </div>
                 ))}
-              </ul>
-              <p className="mt-3 text-xs leading-relaxed text-ink-soft">
-                自主制作のため、実際の業務での削減時間や精度は測定していません。導入する場合は、過去の問い合わせを使って分類の正確さや修正の手間を確認する「検証期間」を設けることをおすすめします。
-              </p>
+              </dl>
             </div>
-          </Section>
-
-          {/* 担当範囲 */}
-          <Section id="scope" eyebrow="07" title="担当範囲と制作者について">
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="rounded-lg border border-line bg-surface p-5">
-                <h3 className="text-sm font-bold text-ink">私の担当範囲</h3>
-                <ul className="mt-3 flex flex-wrap gap-2">
+            <div className="flex flex-col gap-5">
+              <div className="rounded-2xl bg-paper p-6">
+                <p className="text-[16px] font-black">私の担当範囲</p>
+                <ul className="mt-4 flex flex-wrap gap-2">
                   {SCOPE.map((s) => (
-                    <li key={s} className="rounded-md bg-brand-soft px-2.5 py-1 text-[13px] font-semibold text-brand-dark">
+                    <li key={s} className="rounded-full bg-white px-3.5 py-1.5 text-[13px] font-bold text-brand-dark ring-1 ring-brand/25">
                       {s}
                     </li>
                   ))}
                 </ul>
-                <p className="mt-3 text-sm leading-relaxed text-ink-soft">{SCOPE_NOTE}</p>
+                <p className="mt-4 text-sm leading-relaxed text-ink-soft">{SCOPE_NOTE}</p>
               </div>
-              <div className="rounded-lg border border-line bg-surface p-5">
-                <h3 className="text-sm font-bold text-ink">制作者</h3>
-                <p className="mt-2 font-bold text-ink">{PROFILE.displayName}</p>
-                <p className="text-sm text-ink-soft">{PROFILE.role}</p>
-                <dl className="mt-3 grid grid-cols-3 gap-2">
+              <div className="rounded-2xl bg-paper p-6">
+                <p className="text-[16px] font-black">制作者</p>
+                <p className="mt-3 text-[18px] font-black">
+                  {PROFILE.displayName}
+                  <span className="ml-2 text-sm font-bold text-ink-soft">{PROFILE.role}</span>
+                </p>
+                <dl className="mt-4 grid grid-cols-3 gap-2">
                   {PROFILE.experience.map((e) => (
-                    <div key={e.label} className="rounded-md bg-paper px-3 py-2">
+                    <div key={e.label} className="rounded-xl bg-white px-3 py-3 text-center">
                       <dt className="text-[11px] leading-tight text-muted">{e.label}</dt>
-                      <dd className="mt-0.5 font-bold text-ink">{e.value}</dd>
+                      <dd className="mt-1 text-[18px] font-black text-brand">{e.value}</dd>
                     </div>
                   ))}
                 </dl>
-                <p className="mt-3 text-[13px] text-ink-soft">対応技術：{PROFILE.skills.join(" / ")}</p>
+                <p className="mt-4 text-[13px] text-ink-soft">対応技術：{PROFILE.skills.join(" / ")}</p>
               </div>
             </div>
-            <div className="mt-6">
-              <h3 className="text-sm font-bold text-ink">今後追加できる機能</h3>
-              <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {FUTURE.map((f) => (
-                  <li key={f} className="rounded-md border border-dashed border-line-strong bg-surface px-3 py-2 text-sm text-ink-soft">
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Section>
+          </div>
 
-          {/* リンク・相談 */}
-          <Section id="contact" eyebrow="08" title="デモ・ソースコード・ご相談">
-            <div className="grid gap-3 sm:grid-cols-2">
-              <LinkCard label="デモURL" url={PROFILE.demoUrl} fallbackHref="/" fallbackText="このサイトのデモページ（公開URLは準備中）" />
-              <LinkCard label="ソースコード" url={PROFILE.sourceUrl} fallbackText="GitHubで公開準備中" />
-            </div>
+          <h3 className="mt-14 text-center text-[20px] font-black">今後追加できる機能</h3>
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {FUTURE.map((f) => (
+              <li key={f} className="flex items-center gap-2.5 rounded-xl bg-paper px-4 py-3 text-sm font-medium">
+                <span className="text-brand">＋</span>
+                {f}
+              </li>
+            ))}
+          </ul>
+        </Section>
 
-            <div className="mt-8 rounded-xl bg-ink p-6 text-white sm:p-8">
-              <h3 className="text-[20px] font-bold leading-snug">生成AIを使った業務効率化・小規模なWebアプリ開発のご相談を受け付けています</h3>
-              <p className="mt-3 text-sm leading-relaxed text-white/80">
-                「この作業をAIで楽にできないか」という段階からご相談いただけます。まずは小さく試作し、実際の業務で使えるかを確認しながら進めます。
-              </p>
-              <ul className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {SIMILAR_WORKS.map((w) => (
-                  <li key={w.title} className="rounded-lg bg-white/8 px-4 py-3">
-                    <p className="text-sm font-bold">{w.title}</p>
-                    <p className="mt-0.5 text-xs leading-relaxed text-white/70">{w.body}</p>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-                {PROFILE.contactUrl ? (
-                  <a
-                    href={PROFILE.contactUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-lg bg-white px-5 py-3 text-[15px] font-bold text-ink hover:bg-paper"
-                  >
-                    {PROFILE.contactLabel}
-                  </a>
-                ) : (
-                  <span className="inline-flex items-center justify-center rounded-lg border border-white/30 px-5 py-3 text-sm text-white/80">
-                    ご相談は、ご覧いただいている募集サイトのメッセージからお送りください
-                  </span>
-                )}
-                <p className="text-xs text-white/60">対応範囲や進め方は、ヒアリングのうえでご提案します。</p>
-              </div>
+        {/* リンク */}
+        <Section id="links" title="デモ・ソースコード">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <LinkCard label="デモURL" url={PROFILE.demoUrl} fallbackHref="/" fallbackText="このサイトのデモページ" />
+            <LinkCard label="ソースコード（GitHub）" url={PROFILE.sourceUrl} fallbackText="公開準備中" />
+          </div>
+        </Section>
+
+        {/* 相談 */}
+        <section id="contact" className="bg-brand px-4 py-16 text-white sm:px-6 sm:py-20">
+          <div className="mx-auto max-w-5xl">
+            <h2 className="text-center text-[24px] font-black leading-snug sm:text-[30px]">
+              生成AIを使った業務効率化・
+              <br className="sm:hidden" />
+              小規模なWebアプリ開発の
+              <br />
+              ご相談を受け付けています
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-center text-[15px] leading-[1.9] text-white/85">
+              「この作業をAIで楽にできないか」という段階からご相談いただけます。まずは小さく試作し、実際の業務で使えるかを確かめながら進めます。
+            </p>
+            <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {SIMILAR_WORKS.map((w) => (
+                <li key={w.title} className="rounded-2xl bg-white p-5 text-ink">
+                  <p className="flex items-start gap-2 text-[15px] font-black leading-snug">
+                    <IconCheck className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
+                    {w.title}
+                  </p>
+                  <p className="mt-1.5 pl-7 text-[13px] leading-relaxed text-ink-soft">{w.body}</p>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-10 flex flex-col items-center gap-3">
+              {PROFILE.contactUrl ? (
+                <a
+                  href={PROFILE.contactUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-w-[280px] items-center justify-center rounded-xl bg-accent px-8 py-4 text-[16px] font-black text-ink shadow-[var(--shadow-cta)] hover:bg-accent-dark"
+                >
+                  {PROFILE.contactLabel}
+                </a>
+              ) : (
+                <p className="rounded-xl bg-white/15 px-6 py-4 text-center text-[15px] font-bold">ご相談は、ご覧いただいている募集サイトのメッセージからお送りください</p>
+              )}
+              <p className="text-xs text-white/70">対応範囲や進め方は、ヒアリングのうえでご提案します。</p>
             </div>
-          </Section>
-        </div>
+          </div>
+        </section>
       </main>
       <SiteFooter />
     </>
   );
 }
 
-function Section({ id, eyebrow, title, children }: { id: string; eyebrow: string; title: string; children: React.ReactNode }) {
+function Section({
+  id,
+  title,
+  lead,
+  tone = "paper",
+  children,
+}: {
+  id: string;
+  title: string;
+  lead?: string;
+  tone?: "paper" | "white";
+  children: React.ReactNode;
+}) {
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-16">
-      <p className="text-xs font-bold tracking-[0.2em] text-brand">{eyebrow}</p>
-      <h2 id={`${id}-title`} className="mb-6 mt-1 text-[22px] font-bold leading-snug sm:text-[24px]">
-        {title}
-      </h2>
-      {children}
+    <section id={id} aria-labelledby={`${id}-title`} className={`scroll-mt-16 px-4 py-16 sm:px-6 sm:py-20 ${tone === "white" ? "bg-white" : ""}`}>
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-10 text-center">
+          <h2 id={`${id}-title`} className="text-[24px] font-black leading-snug tracking-wide sm:text-[32px]">
+            {title}
+          </h2>
+          {lead && <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-soft">{lead}</p>}
+        </div>
+        {children}
+      </div>
     </section>
   );
 }
 
-function CheckList({ title, items }: { title: string; items: readonly string[] }) {
+function BrowserFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-lg border border-line bg-surface p-5">
-      <h3 className="text-sm font-bold text-ink">{title}</h3>
-      <ul className="mt-3 space-y-2.5">
+    <div className="overflow-hidden rounded-2xl bg-white shadow-[0_20px_50px_rgba(32,60,45,0.15)] ring-1 ring-line">
+      <div className="flex items-center gap-1.5 border-b border-line bg-paper px-4 py-2.5" aria-hidden="true">
+        <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
+        <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
+        <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function RoleCard({ label, color, items }: { label: string; color: "brand" | "accent"; items: string[] }) {
+  const head = color === "brand" ? "bg-brand text-white" : "bg-accent text-ink";
+  const mark = color === "brand" ? "text-brand" : "text-accent-dark";
+  return (
+    <div className="overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)] ring-1 ring-line">
+      <p className={`px-6 py-3.5 text-center text-[17px] font-black ${head}`}>{label}</p>
+      <ul className="space-y-3 p-6">
+        {items.map((it) => (
+          <li key={it} className="flex items-start gap-3 text-[15px] font-medium">
+            <IconCheck className={`mt-0.5 h-5 w-5 shrink-0 ${mark}`} />
+            {it}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function CheckCard({ icon, title, items }: { icon: React.ReactNode; title: string; items: readonly string[] }) {
+  return (
+    <div className="rounded-2xl bg-white p-6 shadow-[var(--shadow-card)]">
+      <p className="flex items-center gap-3 text-[17px] font-black">
+        <IconBadge>{icon}</IconBadge>
+        {title}
+      </p>
+      <ul className="mt-5 space-y-3">
         {items.map((s) => (
-          <li key={s} className="flex gap-2.5 text-sm leading-relaxed text-ink-soft">
-            <svg width="16" height="16" viewBox="0 0 16 16" className="mt-1 shrink-0 text-low" aria-hidden="true">
-              <path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+          <li key={s} className="flex gap-3 text-[14px] leading-[1.8] text-ink-soft">
+            <IconCheck className="mt-1 h-4 w-4 shrink-0 text-brand" />
             {s}
           </li>
         ))}
@@ -343,20 +421,24 @@ function CheckList({ title, items }: { title: string; items: readonly string[] }
 }
 
 function LinkCard({ label, url, fallbackHref, fallbackText }: { label: string; url: string; fallbackHref?: string; fallbackText: string }) {
-  return (
-    <div className="rounded-lg border border-line bg-surface p-4">
-      <p className="text-xs font-semibold text-muted">{label}</p>
-      {url ? (
-        <a href={url} target="_blank" rel="noopener noreferrer" className="mt-1 block break-all font-semibold text-brand underline underline-offset-4">
-          {url}
-        </a>
-      ) : fallbackHref ? (
-        <Link href={fallbackHref} className="mt-1 block font-semibold text-brand underline underline-offset-4">
-          {fallbackText}
-        </Link>
-      ) : (
-        <p className="mt-1 font-semibold text-ink-soft">{fallbackText}</p>
-      )}
-    </div>
+  const inner = (
+    <>
+      <p className="text-xs font-bold text-muted">{label}</p>
+      <p className="mt-1 break-all text-[15px] font-bold text-brand-dark">{url ? url.replace(/^https?:\/\//, "") : fallbackText}</p>
+    </>
   );
+  const cls = "block rounded-2xl bg-white p-6 shadow-[var(--shadow-card)] transition-colors hover:ring-2 hover:ring-brand/30";
+  if (url)
+    return (
+      <a href={url} target="_blank" rel="noopener noreferrer" className={cls}>
+        {inner}
+      </a>
+    );
+  if (fallbackHref)
+    return (
+      <Link href={fallbackHref} className={cls}>
+        {inner}
+      </Link>
+    );
+  return <div className={cls}>{inner}</div>;
 }
