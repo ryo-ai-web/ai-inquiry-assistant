@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "BIZ UDPGothic", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --color-paper: #f6f5f1;
+  --color-surface: #ffffff;
+  --color-ink: #1b2330;
+  --color-ink-soft: #3d4756;
+  --color-muted: #5f6977;
+  --color-line: #e2e0d9;
+  --color-line-strong: #cfccc2;
+
+  --color-brand: #1d4f7a;
+  --color-brand-dark: #153b5c;
+  --color-brand-soft: #e8eff6;
+
+  --color-high: #b42318;
+  --color-high-soft: #fdecea;
+  --color-mid: #93500a;
+  --color-mid-soft: #fdf2e2;
+  --color-low: #2f6b3f;
+  --color-low-soft: #e9f4ec;
+
+  --color-demo: #6b4e16;
+  --color-demo-soft: #fbf3df;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "palt" 0;
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+}
+
+::selection {
+  background: #cfe0ef;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 営業資料（/sheet）の印刷設定 */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  body {
+    background: #fff;
+  }
+  .no-print {
+    display: none !important;
+  }
+  html,
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .sheet-root {
+    display: block !important;
+    overflow: visible !important;
+  }
+  .sheet-page {
+    width: 210mm !important;
+    height: 296.5mm !important;
+    margin: 0 !important;
+    break-inside: avoid;
+  }
+}
