@@ -104,8 +104,3 @@ body {
 }
 
 /* ヒーローの背景（淡いグリーンのグラデーション） */
-.bg-hero {
-  background:
-    radial-gradient(1200px 500px at 85% 10%, rgba(255, 236, 170, 0.55), transparent 60%),
-    linear-gradient(160deg, #e3f5e8 0%, #eef8ef 45%, #f7fbf4 100%);
-}

@@ -50,13 +50,6 @@ export function Logo({ size = 32 }: { size?: number }) {
   );
 }
 
-export function SelfMadeBadge({ className = "", children = "自主制作デモ" }: { className?: string; children?: React.ReactNode }) {
-  return (
-    <span className={`inline-flex items-center rounded-full bg-ink/80 px-4 py-1.5 text-[13px] font-bold leading-snug text-white ${className}`}>
-      {children}
-    </span>
-  );
-}
 
 export function SiteFooter() {
   return (
