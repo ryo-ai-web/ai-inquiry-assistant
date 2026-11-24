@@ -226,7 +226,7 @@ vercel --prod   # 本番環境へデプロイ
 │   ├── screenshots/             画面画像（PC・スマートフォン）
 │   ├── sales-sheet.pdf          営業用実績資料（/sheet から出力）
 │   ├── pdf-check/               PDFの各ページを画像化した確認用ファイル
-│   └── proposal-texts.md        募集サイト掲載用の紹介文・提案文
+│   └── eval/                    架空の問い合わせ30件をAIで採点した結果
 ├── public/screenshots/          実績紹介・営業資料で使う画面画像
 ├── src/
 │   ├── app/
