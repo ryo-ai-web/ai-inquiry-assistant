@@ -1,0 +1,554 @@
+{
+  "date": "2026-11-24",
+  "provider": "openai",
+  "model": "gpt-5.4-mini-2026-03-17",
+  "total": 30,
+  "errors": 0,
+  "categoryCorrect": 27,
+  "priorityCorrect": 25,
+  "medianSeconds": 3.9,
+  "avgInputTokens": 883,
+  "avgOutputTokens": 491,
+  "rows": [
+    {
+      "id": "q1",
+      "expected": {
+        "category": "product_question",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "product_question",
+        "priority": "medium",
+        "categoryReason": "予約システムがスマホから利用できるかという機能・使い方の確認なので、商品・サービスの質問に当たります。",
+        "priorityReason": "導入可否や運用に関わる確認事項ですが、緊急の障害や期限切迫の記載はありません。"
+      },
+      "usage": {
+        "inputTokens": 882,
+        "outputTokens": 411
+      },
+      "ms": 4747
+    },
+    {
+      "id": "q2",
+      "expected": {
+        "category": "product_question",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "product_question",
+        "priority": "medium",
+        "categoryReason": "CSVでの顧客データ書き出し機能の有無を確認する問い合わせであり、製品機能に関する質問だからです。",
+        "priorityReason": "導入検討につながる問い合わせですが、本文上は至急対応や障害対応の必要は示されていないためです。"
+      },
+      "usage": {
+        "inputTokens": 894,
+        "outputTokens": 543
+      },
+      "ms": 4878
+    },
+    {
+      "id": "q3",
+      "expected": {
+        "category": "product_question",
+        "priority": "low"
+      },
+      "got": {
+        "category": "other",
+        "priority": "medium",
+        "categoryReason": "資料送付の依頼ではあるものの、サービス内容の確認を目的とした事務連絡であり、見積もりや機能質問には当たらないため。",
+        "priorityReason": "資料送付の依頼であり急ぎの障害や強い緊急性は示されていないため。"
+      },
+      "usage": {
+        "inputTokens": 886,
+        "outputTokens": 429
+      },
+      "ms": 4458
+    },
+    {
+      "id": "q4",
+      "expected": {
+        "category": "product_question",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "product_question",
+        "priority": "medium",
+        "categoryReason": "アカウント数が人数分必要かという、サービスの利用方法に関する質問だからです。",
+        "priorityReason": "利用開始前の確認事項ですが、緊急性や障害対応ではないためです。"
+      },
+      "usage": {
+        "inputTokens": 875,
+        "outputTokens": 496
+      },
+      "ms": 4658
+    },
+    {
+      "id": "q5",
+      "expected": {
+        "category": "product_question",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "product_question",
+        "priority": "medium",
+        "categoryReason": "無料トライアル中に登録したデータを本契約後も使えるかという、サービスの仕様確認の問い合わせだからです。",
+        "priorityReason": "契約前の重要な確認事項ですが、本文からは至急の障害や期限切迫は読み取れないためです。"
+      },
+      "usage": {
+        "inputTokens": 880,
+        "outputTokens": 455
+      },
+      "ms": 3455
+    },
+    {
+      "id": "q6",
+      "expected": {
+        "category": "product_question",
+        "priority": "high"
+      },
+      "got": {
+        "category": "product_question",
+        "priority": "medium",
+        "categoryReason": "複数店舗の設定方法やマニュアルの有無を尋ねており、商品・サービスの使い方に関する質問だからです。",
+        "priorityReason": "導入準備に関する質問で回答は必要ですが、本文からは障害や緊急性は読み取れません。"
+      },
+      "usage": {
+        "inputTokens": 890,
+        "outputTokens": 528
+      },
+      "ms": 3878
+    },
+    {
+      "id": "e1",
+      "expected": {
+        "category": "quote_request",
+        "priority": "high"
+      },
+      "got": {
+        "category": "quote_request",
+        "priority": "high",
+        "categoryReason": "5店舗分の年間契約について見積もりを依頼しており、料金・契約条件の確認が必要な問い合わせだからです。",
+        "priorityReason": "今月中に稟議提出の予定があり、見積もり対応の期限が近いためです。"
+      },
+      "usage": {
+        "inputTokens": 884,
+        "outputTokens": 441
+      },
+      "ms": 3682
+    },
+    {
+      "id": "e2",
+      "expected": {
+        "category": "quote_request",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "quote_request",
+        "priority": "medium",
+        "categoryReason": "10店舗で利用した場合の月額料金を知りたいという、料金・見積もりの依頼だからです。",
+        "priorityReason": "料金確認の依頼ですが、本文上は緊急性や期限の記載がないためです。"
+      },
+      "usage": {
+        "inputTokens": 872,
+        "outputTokens": 490
+      },
+      "ms": 3829
+    },
+    {
+      "id": "e3",
+      "expected": {
+        "category": "quote_request",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "quote_request",
+        "priority": "medium",
+        "categoryReason": "初期設定の代行を含めた金額を知りたいという依頼で、料金の見積もりに関する問い合わせのため。",
+        "priorityReason": "見積もり依頼で回答は必要ですが、本文上は至急対応や障害対応を要する状況ではないため。"
+      },
+      "usage": {
+        "inputTokens": 881,
+        "outputTokens": 491
+      },
+      "ms": 3511
+    },
+    {
+      "id": "e4",
+      "expected": {
+        "category": "quote_request",
+        "priority": "high"
+      },
+      "got": {
+        "category": "quote_request",
+        "priority": "medium",
+        "categoryReason": "3社比較のうえで11月20日までに概算を希望しており、見積もりの依頼と判断できるため。",
+        "priorityReason": "回答期限は示されていますが、障害や強い不満の記載はなく、見積提示の依頼が中心のため。"
+      },
+      "usage": {
+        "inputTokens": 881,
+        "outputTokens": 511
+      },
+      "ms": 4010
+    },
+    {
+      "id": "e5",
+      "expected": {
+        "category": "quote_request",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "quote_request",
+        "priority": "medium",
+        "categoryReason": "団体向けの割引の有無、条件、金額の確認を求めており、料金・契約条件に関する問い合わせだからです。",
+        "priorityReason": "料金条件の確認が必要ですが、本文からは緊急性や期限の近さは読み取れないためです。"
+      },
+      "usage": {
+        "inputTokens": 883,
+        "outputTokens": 484
+      },
+      "ms": 3685
+    },
+    {
+      "id": "e6",
+      "expected": {
+        "category": "quote_request",
+        "priority": "low"
+      },
+      "got": {
+        "category": "quote_request",
+        "priority": "medium",
+        "categoryReason": "来年度の予算取りのために費用感を知りたいという内容で、見積もり・料金の問い合わせに当たるためです。",
+        "priorityReason": "急ぎではない一方で、予算検討に必要な情報のため回答は必要です。"
+      },
+      "usage": {
+        "inputTokens": 887,
+        "outputTokens": 508
+      },
+      "ms": 3987
+    },
+    {
+      "id": "c1",
+      "expected": {
+        "category": "complaint",
+        "priority": "high"
+      },
+      "got": {
+        "category": "complaint",
+        "priority": "high",
+        "categoryReason": "予約画面が開けないという不具合の連絡であり、業務に支障が出ているためです。",
+        "priorityReason": "予約受付に影響しており、すでに電話対応に支障が出ているため、早急な確認が必要です。"
+      },
+      "usage": {
+        "inputTokens": 883,
+        "outputTokens": 505
+      },
+      "ms": 4080
+    },
+    {
+      "id": "c2",
+      "expected": {
+        "category": "complaint",
+        "priority": "high"
+      },
+      "got": {
+        "category": "complaint",
+        "priority": "high",
+        "categoryReason": "管理画面にログイン後、画面が真っ白で表示されないという不具合の報告だからです。",
+        "priorityReason": "ログイン後に画面が表示されない障害で、昨日の夜から継続しており業務影響が大きい可能性があるためです。"
+      },
+      "usage": {
+        "inputTokens": 883,
+        "outputTokens": 690
+      },
+      "ms": 5652
+    },
+    {
+      "id": "c3",
+      "expected": {
+        "category": "complaint",
+        "priority": "high"
+      },
+      "got": {
+        "category": "complaint",
+        "priority": "high",
+        "categoryReason": "請求額が契約プランより高いとして説明を求めており、料金に関する不一致の申し出だからです。",
+        "priorityReason": "請求額の不一致は金額面の不満につながりやすく、早急な確認と説明が必要なためです。"
+      },
+      "usage": {
+        "inputTokens": 877,
+        "outputTokens": 497
+      },
+      "ms": 3816
+    },
+    {
+      "id": "c4",
+      "expected": {
+        "category": "complaint",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "complaint",
+        "priority": "medium",
+        "categoryReason": "予約完了メールが届いていないという不具合・障害の相談であり、受付や対応が必要な内容だからです。",
+        "priorityReason": "メール未着の確認が必要ですが、現時点では業務停止や緊急障害とは明記されていないためです。"
+      },
+      "usage": {
+        "inputTokens": 883,
+        "outputTokens": 533
+      },
+      "ms": 4201
+    },
+    {
+      "id": "c5",
+      "expected": {
+        "category": "complaint",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "complaint",
+        "priority": "high",
+        "categoryReason": "サポートへ電話した後に3日経っても折り返しがないという、対応遅延への不満と確認依頼の問い合わせだからです。",
+        "priorityReason": "折り返し未了による対応遅延への不満が示されており、早急な状況確認と連絡が必要だからです。"
+      },
+      "usage": {
+        "inputTokens": 881,
+        "outputTokens": 582
+      },
+      "ms": 4277
+    },
+    {
+      "id": "c6",
+      "expected": {
+        "category": "complaint",
+        "priority": "high"
+      },
+      "got": {
+        "category": "complaint",
+        "priority": "high",
+        "categoryReason": "同じ時間に予約が重複した不具合についての報告と設定への不満が述べられているため。",
+        "priorityReason": "予約の重複は業務や顧客対応に直接影響するため、早急な確認が必要です。"
+      },
+      "usage": {
+        "inputTokens": 885,
+        "outputTokens": 563
+      },
+      "ms": 4503
+    },
+    {
+      "id": "s1",
+      "expected": {
+        "category": "sales_pitch",
+        "priority": "low"
+      },
+      "got": {
+        "category": "sales_pitch",
+        "priority": "low",
+        "categoryReason": "Web広告の運用代行による集客提案を行いたいという営業・売り込みの連絡だからです。",
+        "priorityReason": "営業・売り込みの連絡であり、緊急対応や必須の返信を要する内容ではないためです。"
+      },
+      "usage": {
+        "inputTokens": 898,
+        "outputTokens": 459
+      },
+      "ms": 3788
+    },
+    {
+      "id": "s2",
+      "expected": {
+        "category": "sales_pitch",
+        "priority": "low"
+      },
+      "got": {
+        "category": "sales_pitch",
+        "priority": "low",
+        "categoryReason": "SEO対策の無料アドバイスを提案し、面談時間を求めているため、他社からの営業・提案に該当します。",
+        "priorityReason": "営業・売り込みの問い合わせであり、緊急対応や必須返信の要件は読み取れません。"
+      },
+      "usage": {
+        "inputTokens": 892,
+        "outputTokens": 423
+      },
+      "ms": 3511
+    },
+    {
+      "id": "s3",
+      "expected": {
+        "category": "sales_pitch",
+        "priority": "low"
+      },
+      "got": {
+        "category": "sales_pitch",
+        "priority": "low",
+        "categoryReason": "人材紹介サービスの案内であり、採用支援の売り込み内容だからです。",
+        "priorityReason": "営業・売り込みに該当し、緊急対応が必要な内容ではないためです。"
+      },
+      "usage": {
+        "inputTokens": 882,
+        "outputTokens": 465
+      },
+      "ms": 3723
+    },
+    {
+      "id": "s4",
+      "expected": {
+        "category": "sales_pitch",
+        "priority": "low"
+      },
+      "got": {
+        "category": "sales_pitch",
+        "priority": "low",
+        "categoryReason": "他社サービスとの連携・協業の可能性についての提案であり、売り込み・営業の内容に当たるためです。",
+        "priorityReason": "営業・協業提案であり、緊急性や障害対応は示されていないためです。"
+      },
+      "usage": {
+        "inputTokens": 893,
+        "outputTokens": 549
+      },
+      "ms": 4196
+    },
+    {
+      "id": "s5",
+      "expected": {
+        "category": "sales_pitch",
+        "priority": "low"
+      },
+      "got": {
+        "category": "sales_pitch",
+        "priority": "low",
+        "categoryReason": "自社の支援を申し出る営業・提案の内容であり、問い合わせというより売り込みに該当します。",
+        "priorityReason": "営業・売り込みの内容で、緊急対応や必須返信の必要性は高くありません。"
+      },
+      "usage": {
+        "inputTokens": 876,
+        "outputTokens": 404
+      },
+      "ms": 3402
+    },
+    {
+      "id": "s6",
+      "expected": {
+        "category": "sales_pitch",
+        "priority": "low"
+      },
+      "got": {
+        "category": "sales_pitch",
+        "priority": "low",
+        "categoryReason": "展示会への出展企業募集の案内であり、他社からの営業・提案に該当するためです。",
+        "priorityReason": "営業・売り込みの案内であり、緊急対応や返信必須の事情は読み取れないためです。"
+      },
+      "usage": {
+        "inputTokens": 886,
+        "outputTokens": 394
+      },
+      "ms": 3175
+    },
+    {
+      "id": "o1",
+      "expected": {
+        "category": "other",
+        "priority": "low"
+      },
+      "got": {
+        "category": "other",
+        "priority": "low",
+        "categoryReason": "業界誌の編集部からの取材依頼であり、商品や料金の問い合わせではないため。",
+        "priorityReason": "取材依頼であり、緊急性の高い障害対応や至急回答が必要な内容ではないため。"
+      },
+      "usage": {
+        "inputTokens": 881,
+        "outputTokens": 514
+      },
+      "ms": 3754
+    },
+    {
+      "id": "o2",
+      "expected": {
+        "category": "other",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "other",
+        "priority": "medium",
+        "categoryReason": "求人ページを見た上での応募意思の連絡であり、商品・料金・不具合などには当てはまらないため。",
+        "priorityReason": "応募希望の連絡であり対応は必要ですが、緊急性は高くないため。"
+      },
+      "usage": {
+        "inputTokens": 878,
+        "outputTokens": 478
+      },
+      "ms": 3892
+    },
+    {
+      "id": "o3",
+      "expected": {
+        "category": "other",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "quote_request",
+        "priority": "medium",
+        "categoryReason": "請求書の再発行と宛名変更の依頼であり、請求条件に関する問い合わせだからです。",
+        "priorityReason": "請求書対応は必要ですが、本文から緊急性や期限の切迫は読み取れないためです。"
+      },
+      "usage": {
+        "inputTokens": 887,
+        "outputTokens": 500
+      },
+      "ms": 3651
+    },
+    {
+      "id": "o4",
+      "expected": {
+        "category": "other",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "product_question",
+        "priority": "medium",
+        "categoryReason": "来月の解約手続き方法を知りたいという、契約に関する案内依頼のためです。",
+        "priorityReason": "解約手続きの案内が必要ですが、本文からは緊急性や障害、期限の逼迫は読み取れないためです。"
+      },
+      "usage": {
+        "inputTokens": 876,
+        "outputTokens": 574
+      },
+      "ms": 4257
+    },
+    {
+      "id": "o5",
+      "expected": {
+        "category": "other",
+        "priority": "low"
+      },
+      "got": {
+        "category": "other",
+        "priority": "low",
+        "categoryReason": "対応へのお礼と運用状況の報告であり、質問や依頼、苦情には当てはまらないため。",
+        "priorityReason": "返信必須の依頼や緊急性のある内容ではなく、感謝の連絡のため。"
+      },
+      "usage": {
+        "inputTokens": 875,
+        "outputTokens": 354
+      },
+      "ms": 2970
+    },
+    {
+      "id": "o6",
+      "expected": {
+        "category": "other",
+        "priority": "medium"
+      },
+      "got": {
+        "category": "other",
+        "priority": "medium",
+        "categoryReason": "担当者変更後の連絡先を確認したいという事務連絡のため、商品や見積もりに関する問い合わせではありません。",
+        "priorityReason": "連絡先の案内が必要な事務連絡であり、早めの返信が望ましいためです。"
+      },
+      "usage": {
+        "inputTokens": 879,
+        "outputTokens": 471
+      },
+      "ms": 3375
+    }
+  ]
+}

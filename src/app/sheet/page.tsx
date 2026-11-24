@@ -110,7 +110,7 @@ function Page1() {
               priority
             />
           </div>
-          <p className="mt-1.5 text-[10px] text-muted">サンプルの問い合わせを入れたところ（デモモードで撮影）。</p>
+          <p className="mt-1.5 text-[10px] text-muted">サンプルの問い合わせをAI（OpenAI gpt-5.4-mini）で分析したところ。</p>
         </section>
 
         <section>
@@ -134,25 +134,58 @@ function Page2() {
     <Paper n={2}>
       <div className="flex flex-col gap-4 px-12 pt-7">
         <section>
-          <H n="05">AIを使う理由：AIなしの方法で試した結果</H>
-          <p className="mt-2.5 text-[11px] leading-[1.75] text-ink-soft">{EVAL.lead}</p>
-          <p className="mt-1.5 text-[11.5px] font-bold">
-            AIを使わないキーワード判定の正解数：分類 <span className="text-[15px] text-high">{EVAL.categoryCorrect}/{EVAL.total}</span>件、重要度{" "}
-            <span className="text-[15px] text-high">{EVAL.priorityCorrect}/{EVAL.total}</span>件
-          </p>
-          <table className="mt-1.5 w-full border-collapse text-[10px] leading-[1.5]">
+          <H n="05">AIでどれだけ正確に仕分けられるか（架空の問い合わせ30件で採点）</H>
+          <div className="mt-2.5 grid grid-cols-[1fr_1.05fr] gap-5">
+            <table className="w-full self-start border-collapse text-[10.5px] leading-[1.5]">
+              <thead>
+                <tr className="border-b-2 border-line-strong text-[9.5px] text-muted">
+                  <th className="py-1 pr-2 text-left font-bold">方法</th>
+                  <th className="py-1 pr-2 text-right font-bold">分類</th>
+                  <th className="py-1 text-right font-bold">重要度</th>
+                </tr>
+              </thead>
+              <tbody>
+                {EVAL.runs.map((r, i) => (
+                  <tr key={r.label} className={`border-b border-line ${i === EVAL.runs.length - 1 ? "bg-brand-soft font-bold" : ""}`}>
+                    <td className="py-1 pr-2">{r.label}</td>
+                    <td className={`py-1 pr-2 text-right tabular-nums ${i === 0 ? "text-high" : "text-brand-dark"}`}>
+                      <b className="text-[13px]">{r.category}</b>/{EVAL.total}
+                    </td>
+                    <td className={`py-1 text-right tabular-nums ${i === 0 ? "text-high" : "text-brand-dark"}`}>
+                      <b className="text-[13px]">{r.priority}</b>/{EVAL.total}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <ul className="space-y-1 text-[10px] leading-[1.6] text-ink-soft">
+              <li>
+                <b className="text-ink">速さ：</b>
+                {EVAL.speed}
+              </li>
+              <li>
+                <b className="text-ink">費用：</b>
+                {EVAL.cost}
+              </li>
+            </ul>
+          </div>
+          <table className="mt-2 w-full border-collapse text-[10px] leading-[1.5]">
             <tbody>
-              {EVAL.misses.slice(0, 4).map((m) => (
+              {EVAL.misses.slice(0, 3).map((m) => (
                 <tr key={m.text} className="border-b border-line align-top">
                   <td className="py-1 pr-3">「{m.text}」</td>
-                  <td className="whitespace-nowrap py-1 pr-3 text-ink-soft">正解 {m.expected}</td>
-                  <td className="whitespace-nowrap py-1 font-bold text-high">→ {m.got}</td>
+                  <td className="whitespace-nowrap py-1 pr-3 text-high">キーワード × {m.keyword}</td>
+                  <td className="whitespace-nowrap py-1 font-bold text-brand-dark">AI ○ {m.ai}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <p className="mt-2 text-[11px] leading-[1.75] text-ink-soft">{EVAL.conclusion}</p>
-          <p className="mt-1 text-[10px] leading-[1.6] text-muted">{EVAL.pending}</p>
+          <ul className="mt-2 list-disc space-y-0.5 pl-4 text-[10px] leading-[1.6] text-ink-soft">
+            {EVAL.findings.slice(1, 3).map((f) => (
+              <li key={f}>{f}</li>
+            ))}
+          </ul>
+          <p className="mt-1 text-[9.5px] leading-[1.6] text-muted">{EVAL.caveat}</p>
         </section>
 
         <div className="grid grid-cols-[1fr_150px] gap-6">
@@ -171,7 +204,7 @@ function Page2() {
             </ol>
           </section>
           <figure>
-            <div className="h-[270px] overflow-hidden rounded-[14px] border-[4px] border-ink">
+            <div className="h-[230px] overflow-hidden rounded-[14px] border-[4px] border-ink">
               <Image src="/screenshots/mobile-result.png" alt="スマートフォンでの結果画面" width={390} height={844} className="block h-full w-full object-cover object-top" />
             </div>
             <figcaption className="mt-1 text-center text-[9.5px] text-muted">スマホ表示</figcaption>
@@ -182,7 +215,7 @@ function Page2() {
           <section>
             <H n="07">まだできないこと</H>
             <ul className="mt-2 list-disc space-y-0.5 pl-4 text-[10px] leading-[1.6] text-ink-soft">
-              {LIMITS.map((l) => (
+              {LIMITS.slice(0, 4).map((l) => (
                 <li key={l}>{l}</li>
               ))}
             </ul>

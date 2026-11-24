@@ -58,9 +58,16 @@ export default function WorksPage() {
                   </a>
                 )}
               </div>
-              <p className="mt-5 text-xs leading-relaxed text-muted">{PROJECT.selfMadeNote}</p>
+              <p className="mt-5 rounded-lg bg-brand-soft px-4 py-3 text-[14px] leading-relaxed">
+                架空の問い合わせ30件で、AIの正解数は<b className="mx-1 text-brand-dark">分類 {EVAL.runs[EVAL.runs.length - 1].category}/{EVAL.total}・重要度 {EVAL.runs[EVAL.runs.length - 1].priority}/{EVAL.total}</b>
+                （AIなしでは {EVAL.runs[0].category}/{EVAL.total}・{EVAL.runs[0].priority}/{EVAL.total}）。
+                <a href="#test" className="font-bold text-brand underline underline-offset-2">
+                  採点の詳細
+                </a>
+              </p>
+              <p className="mt-4 text-xs leading-relaxed text-muted">{PROJECT.selfMadeNote}</p>
             </div>
-            <Shot src="/screenshots/desktop-result.png" alt="結果画面。分類・重要度・要約・やることが表示されている" w={1440} h={1100} priority />
+            <Shot src="/screenshots/desktop-result.png" alt="AI（gpt-5.4-mini）で分析した結果画面。分類・重要度・要約・やることが表示されている" w={1440} h={1100} priority />
           </div>
         </section>
 
@@ -76,30 +83,59 @@ export default function WorksPage() {
           </div>
         </Section>
 
-        <Section id="test" title="AIを使う理由：AIなしの方法で試した結果">
+        <Section id="test" title="AIでどれだけ正確に仕分けられるか">
           <p className="max-w-[44em] text-[15px] leading-[2] text-ink-soft">{EVAL.lead}</p>
 
-          <p className="mt-6 text-[15px] leading-relaxed">
-            AIを使わないキーワード判定の結果：分類は
-            <strong className="mx-1 text-[22px] font-black text-high">
-              {EVAL.categoryCorrect}/{EVAL.total}
-            </strong>
-            件、重要度は
-            <strong className="mx-1 text-[22px] font-black text-high">
-              {EVAL.priorityCorrect}/{EVAL.total}
-            </strong>
-            件が正解でした。
-          </p>
-
           <div className="mt-6 overflow-x-auto">
-            <table className="w-full min-w-[640px] border-collapse text-left text-[13.5px] leading-relaxed">
-              <caption className="mb-2 text-left text-[13px] font-bold text-ink-soft">外れた例（一部）</caption>
+            <table className="w-full min-w-[520px] max-w-3xl border-collapse text-left text-[14px]">
+              <thead>
+                <tr className="border-b-2 border-line-strong text-[12px] text-muted">
+                  <th className="py-2 pr-4 font-bold">方法</th>
+                  <th className="py-2 pr-4 font-bold">分類の正解数</th>
+                  <th className="py-2 font-bold">重要度の正解数</th>
+                </tr>
+              </thead>
+              <tbody>
+                {EVAL.runs.map((r, i) => {
+                  const best = i === EVAL.runs.length - 1;
+                  return (
+                    <tr key={r.label} className={`border-b border-line ${best ? "bg-brand-soft/60 font-bold" : ""}`}>
+                      <td className="py-2.5 pr-4">
+                        {r.label}
+                        {r.note && <span className="ml-2 rounded bg-brand px-1.5 py-0.5 text-[11px] text-white">{r.note}</span>}
+                      </td>
+                      <td className={`py-2.5 pr-4 tabular-nums ${i === 0 ? "text-high" : "text-brand-dark"}`}>
+                        <span className="text-[18px] font-black">{r.category}</span> / {EVAL.total}
+                      </td>
+                      <td className={`py-2.5 tabular-nums ${i === 0 ? "text-high" : "text-brand-dark"}`}>
+                        <span className="text-[18px] font-black">{r.priority}</span> / {EVAL.total}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <ul className="mt-4 max-w-[48em] space-y-1 text-[14px] leading-[1.8] text-ink-soft">
+            <li>
+              <b className="text-ink">速さ：</b>
+              {EVAL.speed}
+            </li>
+            <li>
+              <b className="text-ink">費用：</b>
+              {EVAL.cost}
+            </li>
+          </ul>
+
+          <div className="mt-8 overflow-x-auto">
+            <table className="w-full min-w-[680px] border-collapse text-left text-[13.5px] leading-relaxed">
+              <caption className="mb-2 text-left text-[13px] font-bold text-ink-soft">キーワード判定が外れ、AIが正しく分けた例</caption>
               <thead>
                 <tr className="border-b-2 border-line-strong text-[12px] text-muted">
                   <th className="py-2 pr-4 font-bold">問い合わせ文</th>
                   <th className="py-2 pr-4 font-bold">正解</th>
-                  <th className="py-2 pr-4 font-bold">判定</th>
-                  <th className="py-2 font-bold">原因</th>
+                  <th className="py-2 pr-4 font-bold">キーワード判定</th>
+                  <th className="py-2 font-bold">AI</th>
                 </tr>
               </thead>
               <tbody>
@@ -107,17 +143,22 @@ export default function WorksPage() {
                   <tr key={m.text} className="border-b border-line align-top">
                     <td className="py-2.5 pr-4">「{m.text}」</td>
                     <td className="whitespace-nowrap py-2.5 pr-4">{m.expected}</td>
-                    <td className="whitespace-nowrap py-2.5 pr-4 font-bold text-high">{m.got}</td>
-                    <td className="py-2.5 text-ink-soft">{m.why}</td>
+                    <td className="whitespace-nowrap py-2.5 pr-4 text-high">× {m.keyword}</td>
+                    <td className="whitespace-nowrap py-2.5 font-bold text-brand-dark">○ {m.ai}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          <p className="mt-6 max-w-[44em] text-[15px] leading-[2] text-ink-soft">{EVAL.conclusion}</p>
-          <p className="mt-4 max-w-[44em] border-l-4 border-accent pl-4 text-[13.5px] leading-[1.9] text-ink-soft">
-            {EVAL.pending}
+          <h3 className="mt-8 text-[17px] font-bold">分かったこと</h3>
+          <ul className="mt-3 max-w-[48em] list-disc space-y-2 pl-5 text-[15px] leading-[1.9] text-ink-soft marker:text-muted">
+            {EVAL.findings.map((f) => (
+              <li key={f}>{f}</li>
+            ))}
+          </ul>
+          <p className="mt-5 max-w-[48em] border-l-4 border-accent pl-4 text-[13.5px] leading-[1.9] text-ink-soft">
+            {EVAL.caveat}
             {EVAL_FILES && (
               <>
                 {" "}
@@ -141,13 +182,19 @@ export default function WorksPage() {
           <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
             <figure>
               <Shot src="/screenshots/desktop-reply.png" alt="返信の下書き。書き方の切り替えと【要確認】の表示" w={1440} h={1100} />
-              <figcaption className="mt-2 text-[13px] text-muted">返信の下書き。黄色い部分が【要確認】。</figcaption>
+              <figcaption className="mt-2 text-[13px] text-muted">AIが作った返信の下書き。確定できない内容は【要確認】として残しています。</figcaption>
             </figure>
             <figure className="mx-auto w-full max-w-[260px]">
               <Shot src="/screenshots/mobile-result.png" alt="スマートフォンでの結果表示" w={390} h={844} />
-              <figcaption className="mt-2 text-[13px] text-muted">スマートフォンでの表示。</figcaption>
+              <figcaption className="mt-2 text-[13px] text-muted">スマートフォンでの表示（AIで分析）。</figcaption>
             </figure>
           </div>
+          <figure className="mt-10">
+            <Shot src="/screenshots/batch-result.png" alt="一括処理の結果。10件の問い合わせをAIで分類し、重要度の高い順に並べた表" w={1440} h={1100} />
+            <figcaption className="mt-2 text-[13px] text-muted">
+              一括処理：CSVの問い合わせ10件をAIで仕分け、重要度の高い順に並べたところ。結果はCSVで保存できます。
+            </figcaption>
+          </figure>
         </Section>
 
         <Section id="decisions" title="作りながら決めたこと">

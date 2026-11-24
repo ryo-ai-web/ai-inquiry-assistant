@@ -23,7 +23,7 @@ describe("getProvider（使うAIの選び方）", () => {
 
 describe("getModel", () => {
   it("提供元ごとの既定モデルと、上書き", () => {
-    expect(getModel(env({ OPENAI_API_KEY: "sk-x" }))).toBe("gpt-5-mini");
+    expect(getModel(env({ OPENAI_API_KEY: "sk-x" }))).toBe("gpt-5.4-mini");
     expect(getModel(env({ OPENAI_API_KEY: "sk-x", OPENAI_MODEL: "gpt-x" }))).toBe("gpt-x");
     expect(getModel(env({ ANTHROPIC_API_KEY: "k", ANTHROPIC_MODEL: "claude-x" }))).toBe("claude-x");
   });

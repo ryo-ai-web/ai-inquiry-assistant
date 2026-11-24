@@ -9,7 +9,7 @@ export type AiProvider = "anthropic" | "openai";
 
 export const DEFAULT_MODELS: Record<AiProvider, string> = {
   anthropic: "claude-opus-5-5",
-  openai: "gpt-5-mini",
+  openai: "gpt-5.4-mini",
 };
 /** 互換のため残している（Claudeの既定モデル） */
 export const DEFAULT_MODEL = DEFAULT_MODELS.anthropic;
@@ -59,17 +59,17 @@ const SYSTEM_PROMPT = `あなたは企業の問い合わせ窓口を支援する
 
 # 各項目のルール
 - category: 次のいずれか1つ
-  - product_question: 商品・サービスの機能、使い方、導入についての質問
-  - quote_request: 見積もり、料金、契約条件の依頼
+  - product_question: 商品・サービスの機能、使い方、導入、資料請求についての質問
+  - quote_request: 新しく購入・契約・追加する場合の見積もり、料金、契約条件の依頼
   - complaint: 不具合、障害、苦情、クレーム
   - sales_pitch: 他社からの営業・提案・売り込み
-  - other: 上記に当てはまらないもの（取材依頼、採用、事務連絡など）
+  - other: 上記に当てはまらないもの（請求書の再発行・解約・担当者の変更などの事務手続き、取材依頼、採用など）
 - categoryReason: 分類の根拠を1文で。
 - summary: 問い合わせの要点を2〜3文、120〜200字程度で。本文にない事実を補わない。
 - priority: high / medium / low
-  - high: 障害などで業務や売上に影響している、期限が近い、強い不満がある、成約につながる可能性が高い
+  - high: 障害などで業務や売上に影響している、強い不満がある、成約につながる可能性が高い、回答や対応の期限が書かれていてそれが近い（日付・「来週」「今月中」など、おおむね2週間以内）
   - medium: 回答が必要だが急ぎではない
-  - low: 営業・売り込み、返信が必須でないもの
+  - low: 営業・売り込み、返信が必須でないもの、送り主が「急ぎではない」と明記しているもの
 - priorityReason: 判定の根拠を1文で。
 - actionItems: 担当者がやるべきことを、動詞で終わる短い文で2〜5件。
 - pointsToConfirm: 回答前に社内やお客様へ確認が必要な点を0〜4件。
@@ -88,7 +88,9 @@ const SYSTEM_PROMPT = `あなたは企業の問い合わせ窓口を支援する
  * 生成AIで問い合わせを分析する。Claude と OpenAI のどちらを使うかは getProvider() で決める。
  * どちらも Structured Outputs で JSON の形を固定し、さらに normalizeAnalysis() で中身を検証する。
  */
-export async function analyzeWithAi(text: string): Promise<{ result: Analysis; model: string }> {
+export type AiUsage = { inputTokens: number; outputTokens: number };
+
+export async function analyzeWithAi(text: string): Promise<{ result: Analysis; model: string; usage?: AiUsage }> {
   const provider = getProvider();
   if (!provider) {
     throw new AiError("AI_NOT_CONFIGURED", "AI APIが設定されていません。");
@@ -96,7 +98,7 @@ export async function analyzeWithAi(text: string): Promise<{ result: Analysis; m
   return provider === "openai" ? analyzeWithOpenAi(text) : analyzeWithClaude(text);
 }
 
-async function analyzeWithClaude(text: string): Promise<{ result: Analysis; model: string }> {
+async function analyzeWithClaude(text: string): Promise<{ result: Analysis; model: string; usage?: AiUsage }> {
   const model = getModel();
   const client = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,
@@ -147,7 +149,8 @@ async function analyzeWithClaude(text: string): Promise<{ result: Analysis; mode
       "AIから想定外の形式で応答がありました。もう一度お試しください。",
     );
   }
-  return { result, model: response.model ?? model };
+  const usage = { inputTokens: response.usage.input_tokens, outputTokens: response.usage.output_tokens };
+  return { result, model: response.model ?? model, usage };
 }
 
 /** OpenAI の Structured Outputs（strict）用に、Zod の定義から JSON Schema を作る */
@@ -168,7 +171,7 @@ export function openAiJsonSchema(): Record<string, unknown> {
   return schema;
 }
 
-async function analyzeWithOpenAi(text: string): Promise<{ result: Analysis; model: string }> {
+async function analyzeWithOpenAi(text: string): Promise<{ result: Analysis; model: string; usage?: AiUsage }> {
   const model = getModel();
   const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -215,7 +218,8 @@ async function analyzeWithOpenAi(text: string): Promise<{ result: Analysis; mode
   if (!result) {
     throw new AiError("AI_INVALID_RESPONSE", "AIから想定外の形式で応答がありました。もう一度お試しください。");
   }
-  return { result, model: completion.model ?? model };
+  const usage = completion.usage ? { inputTokens: completion.usage.prompt_tokens, outputTokens: completion.usage.completion_tokens } : undefined;
+  return { result, model: completion.model ?? model, usage };
 }
 
 export function toAiError(error: unknown): AiError {

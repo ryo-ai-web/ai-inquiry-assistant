@@ -21,6 +21,7 @@ type Row = {
   id: string;
   expected: { category: string; priority: string };
   got?: { category: string; priority: string; categoryReason: string; priorityReason: string };
+  usage?: { inputTokens: number; outputTokens: number };
   error?: string;
   ms: number;
 };
@@ -36,12 +37,13 @@ async function worker() {
     const c = EVAL_CASES[i];
     const t0 = Date.now();
     try {
-      const { result, model: m } = await analyzeWithAi(c.text);
+      const { result, model: m, usage } = await analyzeWithAi(c.text);
       model = m;
       rows[i] = {
         id: c.id,
         expected: { category: c.category, priority: c.priority },
         got: { category: result.category, priority: result.priority, categoryReason: result.categoryReason, priorityReason: result.priorityReason },
+        usage,
         ms: Date.now() - t0,
       };
     } catch (e) {
@@ -61,6 +63,9 @@ const priorityCorrect = ok.filter((r) => r.got!.priority === r.expected.priority
 const times = ok.map((r) => r.ms).sort((a, b) => a - b);
 const median = times.length ? times[Math.floor(times.length / 2)] : 0;
 
+const inTok = ok.reduce((n, r) => n + (r.usage?.inputTokens ?? 0), 0);
+const outTok = ok.reduce((n, r) => n + (r.usage?.outputTokens ?? 0), 0);
+
 const summary = {
   date: new Date().toISOString().slice(0, 10),
   provider,
@@ -70,6 +75,8 @@ const summary = {
   categoryCorrect,
   priorityCorrect,
   medianSeconds: Math.round(median / 100) / 10,
+  avgInputTokens: ok.length ? Math.round(inTok / ok.length) : 0,
+  avgOutputTokens: ok.length ? Math.round(outTok / ok.length) : 0,
   rows,
 };
 
@@ -77,3 +84,4 @@ mkdirSync("docs/eval", { recursive: true });
 writeFileSync("docs/eval/ai-result.json", JSON.stringify(summary, null, 2) + "\n");
 console.log(`\nモデル: ${model}`);
 console.log(`分類: ${categoryCorrect}/${EVAL_CASES.length}  重要度: ${priorityCorrect}/${EVAL_CASES.length}  エラー: ${summary.errors}  所要時間の中央値: ${summary.medianSeconds}秒`);
+console.log(`1件あたりの平均トークン数: 入力 ${summary.avgInputTokens} / 出力 ${summary.avgOutputTokens}`);
