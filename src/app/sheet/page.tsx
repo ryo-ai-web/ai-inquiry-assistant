@@ -9,6 +9,7 @@ import {
   FEATURES,
   IDEAS,
   LIMITS,
+  PRICING,
   PROJECT,
   ROLES,
   SCOPE_NOTE,
@@ -232,16 +233,19 @@ function Page2() {
             <div>
               <p className="text-[13px] font-black">似たものを作りたい方へ</p>
               <ul className="mt-1 list-disc pl-4 text-[10px] leading-[1.6] text-ink-soft">
-                {SIMILAR_WORKS.map((w) => (
+                {SIMILAR_WORKS.slice(0, 4).map((w) => (
                   <li key={w}>{w}</li>
                 ))}
               </ul>
-              <p className="mt-1.5 text-[10px] leading-[1.6] text-ink-soft">
+              <p className="mt-1.5 text-[11px] font-bold">
+                料金の目安：{PRICING[0].item} {PRICING[0].price}・{PRICING[0].period}（AI利用料は実費）
+              </p>
+              <p className="mt-1 text-[10px] leading-[1.6] text-ink-soft">
                 {PROFILE.displayName}｜{PROFILE.experience.map((e) => `${e.label} ${e.value}`).join("・")}
               </p>
             </div>
             <dl className="space-y-1 text-[10.5px] leading-snug">
-              <SheetLink label="デモ（AIモードのアクセスコードはメッセージでお伝えします）" value={PROFILE.demoUrl} />
+              <SheetLink label="デモ（AIモードのコードはメッセージで）" value={PROFILE.demoUrl} />
               <SheetLink label="ソースコード" value={PROFILE.sourceUrl} />
               <SheetLink label="ご相談" value={PROFILE.contactUrl} fallback="ご覧の募集サイトのメッセージから" />
             </dl>

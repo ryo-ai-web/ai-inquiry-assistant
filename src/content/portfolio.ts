@@ -118,7 +118,7 @@ export const TECH = [
   { name: "Tailwind CSS v4", role: "PC・スマホの表示" },
   { name: "Claude API / OpenAI API", role: "分類・要約・下書き。キーを入れた方で動く" },
   { name: "Zod", role: "入力とAIの返事のチェック" },
-  { name: "Vitest", role: "入力チェック・エラー処理・CSV読み込みなどのテスト（43件）" },
+  { name: "Vitest", role: "入力チェック・AIの切り替え・エラー処理・CSV読み込みなどのテスト（51件）" },
   { name: "Vercel", role: "公開" },
 ];
 
@@ -134,6 +134,13 @@ export const PROCESS = [
   { title: "実際の文面で確かめる", body: "過去の問い合わせで判定の正確さを測り、数字でご報告します。外れたものは原因と対処をお伝えします。" },
   { title: "使い始める", body: "フォーム・スプレッドシート・Slackなど、今お使いの仕組みとつなぎます。AIは ChatGPT（OpenAI）・Claude のどちらでも対応でき、1件あたりのAI利用料の目安もお出しします。" },
 ];
+
+/** 料金と期間の目安 */
+export const PRICING = [
+  { item: "小さな試作", detail: "画面1つ・機能1つ。このデモを御社の分類や文面に合わせて調整する程度", price: "5万円〜", period: "1週間程度" },
+  { item: "それより大きいもの", detail: "Gmail・フォーム・Slackとの連携、結果の保存、ログインなど", price: "内容を伺ってお見積もり", period: "ご相談" },
+];
+export const PRICING_NOTE = "AIの利用料（OpenAI・Anthropicへの支払い）は別途、実費です。このデモと同じ使い方なら、1件あたり約0.5円が目安です。";
 
 /** 未検証の見込み */
 export const HYPOTHESES = "読んで振り分けるまでの時間が短くなる、返信の言葉づかいがそろう、急ぎのものを見落としにくくなる、という効果を見込んでいますが、実際の業務では測っていません。";

@@ -12,6 +12,8 @@ import {
   HYPOTHESES,
   IDEAS,
   LIMITS,
+  PRICING,
+  PRICING_NOTE,
   PROCESS,
   PROJECT,
   ROLES,
@@ -282,6 +284,31 @@ export default function WorksPage() {
               </li>
             ))}
           </ol>
+          <div className="mt-10 overflow-x-auto">
+            <table className="w-full min-w-[560px] max-w-4xl border-collapse text-left text-[14px]">
+              <caption className="mb-2 text-left text-[16px] font-bold text-ink">料金と期間の目安</caption>
+              <thead>
+                <tr className="border-b-2 border-line-strong text-[12px] text-muted">
+                  <th className="py-2 pr-4 font-bold">内容</th>
+                  <th className="py-2 pr-4 font-bold">料金</th>
+                  <th className="py-2 font-bold">期間</th>
+                </tr>
+              </thead>
+              <tbody>
+                {PRICING.map((p) => (
+                  <tr key={p.item} className="border-b border-line align-top">
+                    <td className="py-3 pr-4">
+                      <b>{p.item}</b>
+                      <span className="block text-[13px] text-ink-soft">{p.detail}</span>
+                    </td>
+                    <td className="whitespace-nowrap py-3 pr-4 text-[16px] font-black text-brand-dark">{p.price}</td>
+                    <td className="whitespace-nowrap py-3 font-bold">{p.period}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="mt-3 max-w-4xl text-[13px] leading-relaxed text-ink-soft">{PRICING_NOTE}</p>
+          </div>
         </Section>
 
         <section id="contact" className="border-t border-line bg-paper px-4 py-14 sm:px-6">
