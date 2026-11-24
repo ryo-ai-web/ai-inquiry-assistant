@@ -28,7 +28,6 @@ export function InquiryAssistant() {
   const [mode, setMode] = useState<Mode>("demo");
   const [text, setText] = useState("");
   const [sampleId, setSampleId] = useState<string | null>(null);
-  const [accessCode, setAccessCode] = useState("");
   const [inputError, setInputError] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>({ kind: "idle" });
   const resultRef = useRef<HTMLDivElement>(null);
@@ -40,7 +39,6 @@ export function InquiryAssistant() {
         text: opts?.text ?? text,
         sampleId: opts?.sampleId !== undefined ? opts.sampleId : sampleId,
         mode: opts?.mode ?? mode,
-        accessCode: accessCode || undefined,
       };
       const invalid = validateInput(body.text);
       if (invalid) {
@@ -85,7 +83,7 @@ export function InquiryAssistant() {
         setPhase({ kind: "error", message: "通信に失敗しました。ネットワーク接続を確認して、もう一度お試しください。" });
       }
     },
-    [text, sampleId, mode, accessCode],
+    [text, sampleId, mode],
   );
 
   // AIモードの可否を確認し、URLの ?sample= があれば入力する
@@ -97,12 +95,11 @@ export function InquiryAssistant() {
 
     fetch("/api/status")
       .then((r) => r.json() as Promise<StatusResponse>)
-      .catch(() => ({ aiAvailable: false, accessCodeRequired: false, model: null }) as StatusResponse)
+      .catch(() => ({ aiAvailable: false, model: null }) as StatusResponse)
       .then((s) => {
         if (cancelled) return;
         setStatus(s);
-        // アクセスコードが必要な公開版では、コードがなくても動くデモモードから始める
-        const initialMode: Mode = s.aiAvailable && !forceDemo && !s.accessCodeRequired ? "ai" : "demo";
+        const initialMode: Mode = s.aiAvailable && !forceDemo ? "ai" : "demo";
         setMode(initialMode);
         if (preset) {
           setText(preset.text);
@@ -138,7 +135,6 @@ export function InquiryAssistant() {
   const length = text.trim().length;
   const over = length > INPUT_LIMITS.max;
   const loading = phase.kind === "loading";
-  const needsCode = mode === "ai" && status?.accessCodeRequired;
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start">
@@ -208,22 +204,6 @@ export function InquiryAssistant() {
           </p>
         </div>
 
-        {needsCode && (
-          <div className="mt-4">
-            <label htmlFor="access-code" className="text-sm font-semibold text-ink-soft">
-              アクセスコード
-            </label>
-            <input
-              id="access-code"
-              type="password"
-              autoComplete="off"
-              value={accessCode}
-              onChange={(e) => setAccessCode(e.target.value)}
-              className="mt-1.5 block w-full rounded-lg border border-line-strong px-3.5 py-2 text-[15px] focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/30"
-            />
-            <p className="mt-1 text-xs text-muted">AIモードは、お渡ししたアクセスコードを入力した場合のみ利用できます。</p>
-          </div>
-        )}
 
         <div className="mt-5 flex flex-col gap-2 sm:flex-row">
           <button
@@ -331,9 +311,7 @@ function ModeSwitch({
           ? "利用できるモードを確認しています…"
           : mode === "ai"
             ? `生成AI API（${status.model ?? "未設定"}）で分析します。数秒〜20秒ほどかかります。`
-            : aiAvailable && status.accessCodeRequired
-              ? "AIを使わずに動作を確認できます。AIモードは、アクセスコードをお持ちの方が使えます（応募メッセージでお伝えしています）。"
-              : aiAvailable
+            : aiAvailable
               ? "AIを使わずに動作を確認できます。サンプルは用意した出力例を、それ以外はキーワードによる簡易判定を表示します。"
               : "このデモ環境ではAI APIを設定していないため、AIを使わないデモモードで動作します。サンプルは用意した出力例を、それ以外はキーワードによる簡易判定を表示します。"}
       </p>

@@ -66,15 +66,6 @@ describe("AIモード", () => {
     expect(r.body.ok && r.body.model).toBe("claude-test");
   });
 
-  it("アクセスコードが設定されていれば、一致しない場合は 401", async () => {
-    vi.stubEnv("ANTHROPIC_API_KEY", "test-key");
-    vi.stubEnv("AI_ACCESS_CODE", "secret-code");
-    const analyze = vi.fn().mockResolvedValue({ result: okResult, model: "m" });
-    expect((await handleAnalyze({ text: sample.text, mode: "ai" }, "t", { analyze })).status).toBe(401);
-    expect((await handleAnalyze({ text: sample.text, mode: "ai", accessCode: "wrong" }, "t", { analyze })).status).toBe(401);
-    expect((await handleAnalyze({ text: sample.text, mode: "ai", accessCode: "secret-code" }, "t", { analyze })).status).toBe(200);
-  });
-
   it("回数制限を超えると 429", async () => {
     vi.stubEnv("ANTHROPIC_API_KEY", "test-key");
     vi.stubEnv("AI_RATE_LIMIT_PER_HOUR", "2");

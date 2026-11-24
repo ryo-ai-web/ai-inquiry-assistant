@@ -245,7 +245,7 @@ function Page2() {
               </p>
             </div>
             <dl className="space-y-1 text-[10.5px] leading-snug">
-              <SheetLink label="デモ（AIモードのコードはメッセージで）" value={PROFILE.demoUrl} />
+              <SheetLink label="デモ（AIモードもそのまま試せます）" value={PROFILE.demoUrl} />
               <SheetLink label="ソースコード" value={PROFILE.sourceUrl} />
               <SheetLink label="ご相談" value={PROFILE.contactUrl} fallback="ご覧の募集サイトのメッセージから" />
             </dl>

@@ -77,7 +77,6 @@ export type ErrorCode =
   | "TOO_LONG"
   | "BAD_REQUEST"
   | "AI_NOT_CONFIGURED"
-  | "ACCESS_CODE_REQUIRED"
   | "RATE_LIMITED"
   | "AI_AUTH_ERROR"
   | "AI_UNAVAILABLE"
@@ -95,7 +94,6 @@ export type AnalyzeResponse = AnalyzeSuccess | AnalyzeFailure;
 
 export type StatusResponse = {
   aiAvailable: boolean;
-  accessCodeRequired: boolean;
   model: string | null;
 };
 

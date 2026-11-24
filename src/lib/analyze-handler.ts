@@ -1,4 +1,3 @@
-import { timingSafeEqual } from "node:crypto";
 import { AiError, analyzeWithAi, isAiConfigured } from "./ai";
 import { checkRateLimit } from "./rate-limit";
 import { ruleBasedAnalysis } from "./rule-based";
@@ -8,7 +7,6 @@ import { validateInput, type AnalyzeResponse, type ErrorCode } from "./schema";
 export type AnalyzeRequestBody = {
   text?: unknown;
   mode?: unknown;
-  accessCode?: unknown;
   sampleId?: unknown;
 };
 
@@ -18,7 +16,6 @@ const STATUS_BY_CODE: Partial<Record<ErrorCode, number>> = {
   TOO_LONG: 400,
   BAD_REQUEST: 400,
   AI_NOT_CONFIGURED: 503,
-  ACCESS_CODE_REQUIRED: 401,
   RATE_LIMITED: 429,
   AI_AUTH_ERROR: 502,
   AI_UNAVAILABLE: 502,
@@ -30,12 +27,6 @@ const STATUS_BY_CODE: Partial<Record<ErrorCode, number>> = {
 
 function fail(code: ErrorCode, message: string): { status: number; body: AnalyzeResponse } {
   return { status: STATUS_BY_CODE[code] ?? 500, body: { ok: false, error: { code, message } } };
-}
-
-function safeEqual(a: string, b: string) {
-  const ab = Buffer.from(a);
-  const bb = Buffer.from(b);
-  return ab.length === bb.length && timingSafeEqual(ab, bb);
 }
 
 /**
@@ -73,14 +64,6 @@ export async function handleAnalyze(
 
   if (!isAiConfigured()) {
     return fail("AI_NOT_CONFIGURED", "AI APIが設定されていないため、AIモードは利用できません。デモモードでお試しください。");
-  }
-
-  const requiredCode = process.env.AI_ACCESS_CODE?.trim();
-  if (requiredCode) {
-    const given = typeof body.accessCode === "string" ? body.accessCode.trim() : "";
-    if (!given || !safeEqual(given, requiredCode)) {
-      return fail("ACCESS_CODE_REQUIRED", "AIモードの利用にはアクセスコードが必要です。正しいコードを入力してください。");
-    }
   }
 
   if (!checkRateLimit(clientKey)) {

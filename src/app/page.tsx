@@ -16,7 +16,7 @@ export default function Home() {
               送信まではしません。下書きを人が直してから使う前提です。
             </p>
             <p className="mt-3 max-w-[40em] text-[13px] leading-relaxed text-muted">
-              AIモードはアクセスコードが必要です（応募メッセージでお伝えしています）。コードがなくても、用意した出力例とキーワード判定で動きを確認できます。
+              AIモードでは、実際に生成AI（OpenAI gpt-5.4-mini）で分析します。AIを使わないデモモードにも切り替えられます。
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
               <a

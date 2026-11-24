@@ -8,7 +8,6 @@ export async function GET() {
   const aiAvailable = isAiConfigured();
   const body: StatusResponse = {
     aiAvailable,
-    accessCodeRequired: aiAvailable && Boolean(process.env.AI_ACCESS_CODE?.trim()),
     model: aiAvailable ? getModel() : null,
   };
   return Response.json(body, { headers: { "Cache-Control": "no-store" } });

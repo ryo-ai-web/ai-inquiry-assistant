@@ -45,7 +45,6 @@ const countPending = (d?: AnalyzeSuccess) => (d ? (d.result.replies.polite.match
 export function BatchAssistant() {
   const [status, setStatus] = useState<StatusResponse | null>(null);
   const [useAi, setUseAi] = useState(false);
-  const [accessCode, setAccessCode] = useState("");
   const [input, setInput] = useState("");
   const [rows, setRows] = useState<Row[]>([]);
   const [running, setRunning] = useState(false);
@@ -57,10 +56,10 @@ export function BatchAssistant() {
   useEffect(() => {
     fetch("/api/status")
       .then((r) => r.json() as Promise<StatusResponse>)
-      .catch(() => ({ aiAvailable: false, accessCodeRequired: false, model: null }) as StatusResponse)
+      .catch(() => ({ aiAvailable: false, model: null }) as StatusResponse)
       .then((s) => {
         setStatus(s);
-        setUseAi(s.aiAvailable && !s.accessCodeRequired);
+        setUseAi(s.aiAvailable);
       });
   }, []);
 
@@ -106,7 +105,7 @@ export function BatchAssistant() {
           const res = await fetch("/api/analyze", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: list[i], mode: useAi ? "ai" : "demo", accessCode: accessCode || undefined }),
+            body: JSON.stringify({ text: list[i], mode: useAi ? "ai" : "demo" }),
             signal: controller.signal,
           });
           const data = (await res.json().catch(() => null)) as AnalyzeResponse | null;
@@ -114,7 +113,7 @@ export function BatchAssistant() {
           else if (!data.ok) {
             update(i, { state: "error", error: data.error.message });
             // 認証・回数制限のエラーは残りも同じ結果になるので止める
-            if (["ACCESS_CODE_REQUIRED", "RATE_LIMITED", "AI_AUTH_ERROR", "AI_NOT_CONFIGURED"].includes(data.error.code)) stopAll = true;
+            if (["RATE_LIMITED", "AI_AUTH_ERROR", "AI_NOT_CONFIGURED"].includes(data.error.code)) stopAll = true;
           } else update(i, { state: "done", data });
         } catch (e) {
           if ((e as Error).name === "AbortError") return;
@@ -229,24 +228,9 @@ export function BatchAssistant() {
               キーワード判定（AI未使用）
             </label>
           </fieldset>
-          {useAi && status?.accessCodeRequired && (
-            <input
-              type="password"
-              value={accessCode}
-              onChange={(e) => setAccessCode(e.target.value)}
-              placeholder="アクセスコード"
-              aria-label="アクセスコード"
-              className="w-40 rounded-lg border border-line-strong px-3 py-2 text-[14px]"
-            />
-          )}
         </div>
         {status && !status.aiAvailable && (
           <p className="mt-2 text-[13px] text-demo">この環境はAIにつないでいないため、キーワード判定で動きます。精度はAIより大きく下がります。</p>
-        )}
-        {status?.aiAvailable && status.accessCodeRequired && !useAi && (
-          <p className="mt-2 text-[13px] text-demo">
-            AIで判定するには、「AIで判定」を選んでアクセスコードを入力してください（応募メッセージでお伝えしています）。キーワード判定はAIより精度が大きく下がります。
-          </p>
         )}
 
         <div className="mt-5 flex flex-wrap gap-3">
