@@ -60,7 +60,7 @@ export function BatchAssistant() {
       .catch(() => ({ aiAvailable: false, accessCodeRequired: false, model: null }) as StatusResponse)
       .then((s) => {
         setStatus(s);
-        setUseAi(s.aiAvailable);
+        setUseAi(s.aiAvailable && !s.accessCodeRequired);
       });
   }, []);
 
@@ -241,7 +241,12 @@ export function BatchAssistant() {
           )}
         </div>
         {status && !status.aiAvailable && (
-          <p className="mt-2 text-[13px] text-demo">この公開版はAIにつないでいないため、キーワード判定で動きます。精度はAIより大きく下がります。</p>
+          <p className="mt-2 text-[13px] text-demo">この環境はAIにつないでいないため、キーワード判定で動きます。精度はAIより大きく下がります。</p>
+        )}
+        {status?.aiAvailable && status.accessCodeRequired && !useAi && (
+          <p className="mt-2 text-[13px] text-demo">
+            AIで判定するには、「AIで判定」を選んでアクセスコードを入力してください（応募メッセージでお伝えしています）。キーワード判定はAIより精度が大きく下がります。
+          </p>
         )}
 
         <div className="mt-5 flex flex-wrap gap-3">

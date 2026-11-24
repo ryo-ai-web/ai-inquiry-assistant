@@ -101,7 +101,8 @@ export function InquiryAssistant() {
       .then((s) => {
         if (cancelled) return;
         setStatus(s);
-        const initialMode: Mode = s.aiAvailable && !forceDemo ? "ai" : "demo";
+        // アクセスコードが必要な公開版では、コードがなくても動くデモモードから始める
+        const initialMode: Mode = s.aiAvailable && !forceDemo && !s.accessCodeRequired ? "ai" : "demo";
         setMode(initialMode);
         if (preset) {
           setText(preset.text);
@@ -330,7 +331,9 @@ function ModeSwitch({
           ? "利用できるモードを確認しています…"
           : mode === "ai"
             ? `生成AI API（${status.model ?? "未設定"}）で分析します。数秒〜20秒ほどかかります。`
-            : aiAvailable
+            : aiAvailable && status.accessCodeRequired
+              ? "AIを使わずに動作を確認できます。AIモードは、アクセスコードをお持ちの方が使えます（応募メッセージでお伝えしています）。"
+              : aiAvailable
               ? "AIを使わずに動作を確認できます。サンプルは用意した出力例を、それ以外はキーワードによる簡易判定を表示します。"
               : "このデモ環境ではAI APIを設定していないため、AIを使わないデモモードで動作します。サンプルは用意した出力例を、それ以外はキーワードによる簡易判定を表示します。"}
       </p>

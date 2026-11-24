@@ -16,7 +16,7 @@ export default function Home() {
               送信まではしません。下書きを人が直してから使う前提です。
             </p>
             <p className="mt-3 max-w-[40em] text-[13px] leading-relaxed text-muted">
-              この公開版はAIにつないでいないため、用意した出力例とキーワードによる簡易判定で動きます。
+              AIモードはアクセスコードが必要です（応募メッセージでお伝えしています）。コードがなくても、用意した出力例とキーワード判定で動きを確認できます。
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
               <a
