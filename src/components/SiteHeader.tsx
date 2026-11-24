@@ -1,12 +1,13 @@
 import Link from "next/link";
 
 const NAV = [
-  { href: "/", label: "デモを試す" },
+  { href: "/", label: "デモ" },
+  { href: "/batch", label: "一括処理" },
   { href: "/works", label: "制作実績" },
   { href: "/sheet", label: "営業資料" },
 ] as const;
 
-export function SiteHeader({ current }: { current: "/" | "/works" | "/sheet" }) {
+export function SiteHeader({ current }: { current: "/" | "/batch" | "/works" | "/sheet" }) {
   return (
     <header className="no-print sticky top-0 z-30 border-b border-line/70 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
@@ -16,7 +17,7 @@ export function SiteHeader({ current }: { current: "/" | "/works" | "/sheet" }) 
             問い合わせ<span className="text-brand">アシスタント</span>
           </span>
         </Link>
-        <nav aria-label="メインメニュー" className="flex items-center gap-0.5 text-[13px] font-bold sm:gap-1 sm:text-sm">
+        <nav aria-label="メインメニュー" className="flex items-center gap-0 text-[13px] font-bold sm:gap-1 sm:text-sm">
           {NAV.map((item) => {
             const active = item.href === current;
             return (
@@ -24,7 +25,7 @@ export function SiteHeader({ current }: { current: "/" | "/works" | "/sheet" }) 
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`whitespace-nowrap rounded-full px-3 py-1.5 transition-colors sm:px-4 ${
+                className={`whitespace-nowrap rounded-full px-2.5 py-1.5 transition-colors sm:px-4 ${
                   active ? "bg-brand-soft text-brand-dark" : "text-ink-soft hover:text-brand"
                 }`}
               >

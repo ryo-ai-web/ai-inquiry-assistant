@@ -100,7 +100,7 @@ function Page1() {
 
         <section>
           <H n="03">画面</H>
-          <div className="mt-3 h-[260px] overflow-hidden rounded border border-line-strong">
+          <div className="mt-3 h-[240px] overflow-hidden rounded border border-line-strong">
             <Image
               src="/screenshots/desktop-result.png"
               alt="PCでの結果画面"
@@ -134,10 +134,10 @@ function Page2() {
     <Paper n={2}>
       <div className="flex flex-col gap-4 px-12 pt-7">
         <section>
-          <H n="05">試してみて分かったこと</H>
+          <H n="05">AIを使う理由：AIなしの方法で試した結果</H>
           <p className="mt-2.5 text-[11px] leading-[1.75] text-ink-soft">{EVAL.lead}</p>
           <p className="mt-1.5 text-[11.5px] font-bold">
-            キーワード判定の正解数：分類 <span className="text-[15px] text-high">{EVAL.categoryCorrect}/{EVAL.total}</span>件、重要度{" "}
+            AIを使わないキーワード判定の正解数：分類 <span className="text-[15px] text-high">{EVAL.categoryCorrect}/{EVAL.total}</span>件、重要度{" "}
             <span className="text-[15px] text-high">{EVAL.priorityCorrect}/{EVAL.total}</span>件
           </p>
           <table className="mt-1.5 w-full border-collapse text-[10px] leading-[1.5]">

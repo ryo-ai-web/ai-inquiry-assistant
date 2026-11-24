@@ -12,6 +12,7 @@ import {
   HYPOTHESES,
   IDEAS,
   LIMITS,
+  PROCESS,
   PROJECT,
   ROLES,
   SCOPE_NOTE,
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
   description: "問い合わせ対応アシスタント（自主制作）を作った理由、設計で決めたこと、試してみた結果。",
 };
 
-const EVAL_FILES = PROFILE.sourceUrl ? `${PROFILE.sourceUrl}/blob/main/tests/fixtures/eval-inquiries.ts` : "";
+const EVAL_FILES = PROFILE.sourceUrl ? `${PROFILE.sourceUrl}/blob/main/src/content/eval-inquiries.ts` : "";
 
 export default function WorksPage() {
   return (
@@ -75,11 +76,11 @@ export default function WorksPage() {
           </div>
         </Section>
 
-        <Section id="test" title="試してみて分かったこと">
+        <Section id="test" title="AIを使う理由：AIなしの方法で試した結果">
           <p className="max-w-[44em] text-[15px] leading-[2] text-ink-soft">{EVAL.lead}</p>
 
           <p className="mt-6 text-[15px] leading-relaxed">
-            キーワード判定の結果：分類は
+            AIを使わないキーワード判定の結果：分類は
             <strong className="mx-1 text-[22px] font-black text-high">
               {EVAL.categoryCorrect}/{EVAL.total}
             </strong>
@@ -144,7 +145,7 @@ export default function WorksPage() {
             </figure>
             <figure className="mx-auto w-full max-w-[260px]">
               <Shot src="/screenshots/mobile-result.png" alt="スマートフォンでの結果表示" w={390} h={844} />
-              <figcaption className="mt-2 text-[13px] text-muted">スマホで見たところ。</figcaption>
+              <figcaption className="mt-2 text-[13px] text-muted">スマートフォンでの表示。</figcaption>
             </figure>
           </div>
         </Section>
@@ -220,6 +221,20 @@ export default function WorksPage() {
               </p>
             </div>
           </div>
+        </Section>
+
+        <Section id="process" title="ご依頼いただく場合の進め方">
+          <ol className="grid gap-x-10 gap-y-5 sm:grid-cols-2">
+            {PROCESS.map((p, i) => (
+              <li key={p.title} className="border-t-2 border-brand pt-3">
+                <p className="text-[16px] font-bold">
+                  <span className="mr-2 font-black text-brand tabular-nums">{i + 1}.</span>
+                  {p.title}
+                </p>
+                <p className="mt-1.5 text-[14px] leading-[1.9] text-ink-soft">{p.body}</p>
+              </li>
+            ))}
+          </ol>
         </Section>
 
         <section id="contact" className="border-t border-line bg-paper px-4 py-14 sm:px-6">

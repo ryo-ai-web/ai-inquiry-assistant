@@ -28,6 +28,9 @@ export default function Home() {
               <Link href="/works" className="text-sm font-bold text-brand underline underline-offset-4 hover:no-underline">
                 作った理由と、試してみた結果
               </Link>
+              <Link href="/batch" className="text-sm font-bold text-brand underline underline-offset-4 hover:no-underline">
+                CSVでまとめて仕分ける
+              </Link>
             </div>
           </div>
         </section>

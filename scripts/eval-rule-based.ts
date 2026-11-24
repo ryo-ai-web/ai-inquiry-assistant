@@ -2,7 +2,7 @@
  * 架空の問い合わせ30件で、デモモードのキーワード判定を採点するスクリプト。
  * 実行: npx tsx scripts/eval-rule-based.ts
  */
-import { EVAL_CASES } from "../tests/fixtures/eval-inquiries";
+import { EVAL_CASES } from "../src/content/eval-inquiries";
 import { ruleBasedAnalysis } from "../src/lib/rule-based";
 
 let cat = 0, pri = 0;
