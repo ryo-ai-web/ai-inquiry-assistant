@@ -41,7 +41,7 @@
 - Next.js 16（App Router / Route Handler）
 - React 19 / TypeScript
 - Tailwind CSS v4
-- Anthropic Claude API（`@anthropic-ai/sdk`、Structured Outputs）
+- Anthropic Claude API（`@anthropic-ai/sdk`）または OpenAI API（`openai`）。どちらも Structured Outputs で出力の形を固定
 - Zod（AIの出力・入力値の検証）
 - Vitest（自動テスト）
 - 公開先：Vercel を想定（データベースは使用していません）
@@ -53,7 +53,7 @@
                                  ├─ 入力チェック（空欄・文字数）
                                  ├─ デモモード → 出力例 or キーワード判定（AI未使用）
                                  └─ AIモード  → アクセスコード確認 → 回数制限
-                                                 → Claude API（JSON形式を指定）
+                                                 → Claude API または OpenAI API（JSON形式を指定）
                                                  → Zodで再検証 → 画面へ
 ```
 
@@ -87,6 +87,9 @@ npm start           # ビルド後のアプリを起動
 | --- | --- | --- |
 | `ANTHROPIC_API_KEY` | AIモードを使う場合 | Anthropic の APIキー。未設定ならデモモードのみ |
 | `ANTHROPIC_MODEL` | 任意 | 使用するモデル。省略時 `claude-opus-5-5` |
+| `OPENAI_API_KEY` | AIモードを使う場合 | OpenAI の APIキー。Claude の代わりに使えます |
+| `OPENAI_MODEL` | 任意 | 使用するモデル。省略時 `gpt-5-mini` |
+| `AI_PROVIDER` | 任意 | `anthropic` または `openai`。省略時は設定されているキーで判断（両方あれば Claude） |
 | `AI_ACCESS_CODE` | 任意（公開時は推奨） | 設定すると、AIモードの利用にこのコードの入力が必要 |
 | `AI_RATE_LIMIT_PER_HOUR` | 任意 | 1時間あたりのAI利用回数の上限（IPごと・目安）。省略時 20 |
 | `NEXT_PUBLIC_AUTHOR_NAME` | 任意 | 実績紹介・営業資料に表示する制作者名 |
@@ -99,11 +102,22 @@ npm start           # ビルド後のアプリを起動
 
 ## AI APIの設定方法
 
-1. [Anthropic Console](https://console.anthropic.com/) でアカウントを作成し、APIキーを発行します（従量課金です）。
-2. `.env.local` の `ANTHROPIC_API_KEY=` にキーを設定します。
+Claude と OpenAI のどちらか一方のキーがあれば動きます。
+
+1. APIキーを発行します（どちらも従量課金です）。
+   - Claude：[Anthropic Console](https://console.anthropic.com/)
+   - OpenAI：[OpenAI Platform](https://platform.openai.com/)
+2. `.env.local` の `ANTHROPIC_API_KEY=` または `OPENAI_API_KEY=` にキーを設定します。
 3. 開発サーバーを再起動すると、画面の「AIモード」が選べるようになります。
 
+両方のキーを設定した場合は Claude を使います。`AI_PROVIDER=openai` で切り替えられます。
+
 実装のポイント（`src/lib/ai.ts`）：
+
+- どちらのAIでも、同じシステムプロンプト・同じZodスキーマ・同じ検証（`normalizeAnalysis()`）を通すため、画面側はどちらのAIかを意識しません。
+- OpenAI では、Zod の定義から JSON Schema を作り（`openAiJsonSchema()`）、`response_format` の strict モードで形を固定しています。gpt-5 系のモデルでは `reasoning_effort: "low"` で応答を速くしています。
+
+Claude 側：
 
 - `client.beta.messages.parse()` と Zod スキーマで、出力を決まったJSON形式に固定しています。
 - 受け取った後も `normalizeAnalysis()` で中身を検証し、空の要約などは「想定外の応答」として扱います。
@@ -111,7 +125,7 @@ npm start           # ビルド後のアプリを起動
 - モデルが安全上の理由で応答を断った場合に、Anthropic側で別モデルに切り替える `fallbacks: "default"`（beta）を有効にしています。
 - 問い合わせ文は `<inquiry>` タグで囲み、文中の指示に従わないようシステムプロンプトで指示しています。
 
-費用の目安はモデルと文章量で変わります。最新の料金は Anthropic の料金ページで確認してください。
+費用の目安はモデルと文章量で変わります。最新の料金は各社の料金ページで確認してください。
 
 ## デモモードの説明
 
@@ -147,7 +161,7 @@ npm run eval
 
 デモモードのキーワード判定の結果（2026年11月時点）：分類 14/30、重要度 18/30。
 
-AIモードでの採点は、`.env.local` にAPIキーを設定してから実行します（30回APIを呼ぶため、少額の料金がかかります）。
+AIモードでの採点は、`.env.local` にAPIキー（Claude または OpenAI）を設定してから実行します（30回APIを呼ぶため、少額の料金がかかります）。
 
 ```bash
 npm run eval:ai
@@ -159,8 +173,8 @@ npm run eval:ai
 
 - APIキーはサーバー側（Route Handler）でのみ使用し、ブラウザには送りません。ソースコードにも記載しないでください。
 - 問い合わせ本文はサーバーに保存せず、エラーログにも本文は出力しません（エラーの種類のみ記録）。
-- **AIモードでは、入力内容が外部のAI事業者（Anthropic）へ送信されます。** 実際の顧客情報を扱う場合は、事業者の利用規約・データの取り扱い方針と、自社の個人情報の取り扱いルールを確認してください。
-- 公開URLにAPIキーを設定すると、誰でもAIを呼び出せるため費用が発生します。`AI_ACCESS_CODE` の設定と、Anthropic Console での利用上限（Spend limit）の設定を推奨します。
+- **AIモードでは、入力内容が外部のAI事業者（Anthropic または OpenAI）へ送信されます。** 実際の顧客情報を扱う場合は、事業者の利用規約・データの取り扱い方針と、自社の個人情報の取り扱いルールを確認してください。
+- 公開URLにAPIキーを設定すると、誰でもAIを呼び出せるため費用が発生します。`AI_ACCESS_CODE` の設定と、各社の管理画面での利用上限の設定を推奨します。
 - 内蔵の回数制限はメモリ上の簡易的なもので、サーバーレス環境ではインスタンスごとに独立します。厳密な制限が必要な場合は Upstash Redis などを利用してください。
 - 入力は3,000文字、リクエストは20KBまでに制限しています。
 - `X-Frame-Options` などの基本的なセキュリティヘッダーを `next.config.ts` で設定しています。
@@ -174,8 +188,8 @@ npm run eval:ai
 2. [Vercel](https://vercel.com/) にログインし、「Add New… → Project」からリポジトリをインポートします。
 3. Framework Preset が Next.js になっていることを確認します（ビルド設定は変更不要）。
 4. 「Environment Variables」に必要な環境変数を設定します。
-   - デモモードだけで公開する場合：`ANTHROPIC_API_KEY` は **設定しない**
-   - AIモードも公開する場合：`ANTHROPIC_API_KEY` と `AI_ACCESS_CODE` を設定
+   - デモモードだけで公開する場合：`ANTHROPIC_API_KEY` / `OPENAI_API_KEY` は **設定しない**
+   - AIモードも公開する場合：`ANTHROPIC_API_KEY`（または `OPENAI_API_KEY`）と `AI_ACCESS_CODE` を設定
    - 表示用：`NEXT_PUBLIC_AUTHOR_NAME` / `NEXT_PUBLIC_SOURCE_URL` / `NEXT_PUBLIC_CONTACT_URL`
 5. 「Deploy」を押します。発行されたURLを `NEXT_PUBLIC_DEMO_URL` に設定し、再デプロイします。
 
@@ -217,7 +231,7 @@ vercel --prod   # 本番環境へデプロイ
 │   ├── config/profile.ts        制作者情報・公開URL（公開前に要設定）
 │   ├── content/portfolio.ts     実績紹介・営業資料の文章
 │   └── lib/
-│       ├── ai.ts                Claude API呼び出し・エラー変換
+│       ├── ai.ts                Claude / OpenAI API の呼び出し・切り替え・エラー変換
 │       ├── analyze-handler.ts   分析APIの本体（入力チェック・モード分岐）
 │       ├── schema.ts            出力スキーマ・入力チェック・正規化
 │       ├── samples.ts           サンプル問い合わせと出力例（架空）
@@ -232,7 +246,7 @@ vercel --prod   # 本番環境へデプロイ
 - [ ] 経歴・担当範囲の記載が自分の経験と一致している（会社・チームの実績を含めていない）
 - [ ] 「対応可能な類似案件」に、実際に対応できない内容が含まれていない
 - [ ] `.env.local` がGitに含まれていない（`git status` で確認）
-- [ ] 公開URLにAPIキーを設定する場合、`AI_ACCESS_CODE` と Anthropic Console の利用上限を設定した
+- [ ] 公開URLにAPIキーを設定する場合、`AI_ACCESS_CODE` と、利用するAI事業者の管理画面で利用上限を設定した
 - [ ] 公開後のURLで `/`・`/works`・`/sheet` が表示される
 - [ ] URLを設定した後、`/sheet` から営業資料のPDFを出力し直した
 

@@ -1,6 +1,6 @@
 /**
  * 架空の問い合わせ30件を、AIモード（アプリと同じ analyzeWithAi）で採点するスクリプト。
- * .env.local の ANTHROPIC_API_KEY を使います。30回APIを呼ぶため、少額ですが料金がかかります。
+ * .env.local の ANTHROPIC_API_KEY または OPENAI_API_KEY を使います。30回APIを呼ぶため、少額ですが料金がかかります。
  *
  * 実行: npm run eval:ai
  * 結果: docs/eval/ai-result.json（APIキーや返信案の本文は含めません）
@@ -9,12 +9,13 @@ import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { EVAL_CASES } from "../src/content/eval-inquiries";
 
 if (existsSync(".env.local")) process.loadEnvFile(".env.local");
-if (!process.env.ANTHROPIC_API_KEY?.trim()) {
-  console.error(".env.local に ANTHROPIC_API_KEY が設定されていません。");
+const { analyzeWithAi, getProvider } = await import("../src/lib/ai");
+const provider = getProvider();
+if (!provider) {
+  console.error(".env.local に ANTHROPIC_API_KEY または OPENAI_API_KEY が設定されていません。");
   process.exit(1);
 }
-
-const { analyzeWithAi } = await import("../src/lib/ai");
+console.log(`使用するAI: ${provider === "openai" ? "OpenAI" : "Claude"}`);
 
 type Row = {
   id: string;
@@ -62,6 +63,7 @@ const median = times.length ? times[Math.floor(times.length / 2)] : 0;
 
 const summary = {
   date: new Date().toISOString().slice(0, 10),
+  provider,
   model,
   total: EVAL_CASES.length,
   errors: rows.length - ok.length,
